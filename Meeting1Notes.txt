@@ -1,0 +1,49 @@
+ 
+21/02/2020
+
+Ideas:
+    - Not Mental Health
+    - Weather Tracker interactive interface -- This one
+    - Book website, like goodreads
+    - Or Art website for getting all art in one place
+
+Weather Tracker interactive interface
+    - User and Visitor,
+    - User could post what's happening with the weather, i.e street flodded
+    - Need Moderators?  A seperate Job?  Elevated privilages, actual weather people,
+       - Rating System for sating usfulness of comments
+       
+    Personas
+        - Average Person, wants to check weather
+      
+Weather Tracker interactive interface -- Decided
+
+Overview
+
+Web app which tracks weather systems and provides an interactive map of these wether systems.  User can click on locations and save favouiates for locations they are interested in(e.g. where they live):  This data would appear in their feed.  Comment have tags and automatic generated tags for the location they are commenting on.
+
+If not logged in, can view, if logged in, can favouite locations and add comments(a area/point on map with weather event).
+
+---------------------------
+allows for user generated updates
+
+Colour code pins, as zoom on area, more pins appear.
+
+Comments expand on the same page, no redirecting
+
+Top contributers (of comments), could visit another persons page to see activity/comments, to do that in the future, could be added.
+
+Leaderboard for top contributers
+    -  Number of comments and rating number (percentage upvoted?)
+
+Email alerts, have email for forgot password, impliment for future.
+Forgot 
+
+Could save comment you like.
+
+--------------------------
+Personas, 
+    - Average Person
+    - Somone who travels a lot
+    - Persona for a Admin, maintain quality of site
+    - Person who wants to add pin/weather, weather watchers/observer
