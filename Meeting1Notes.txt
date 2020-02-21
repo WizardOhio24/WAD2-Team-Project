@@ -47,3 +47,18 @@ Personas,
     - Somone who travels a lot
     - Persona for a Admin, maintain quality of site
     - Person who wants to add pin/weather, weather watchers/observer
+    
+--------------------------
+
+Requirements
+    - Users must be able to create account 
+    - Logged in users must be able to add pins (with tags)
+    - Logged in user should be able to add favouriate places
+    - Logged in user should be able to rate comments
+    - Pins must have a location and associated comment
+    - All Users must be able to view pins 
+    - All Users could sign in through thrid parties such as facebook, google etc.
+    
+
+----------------------------------
+Name: 
