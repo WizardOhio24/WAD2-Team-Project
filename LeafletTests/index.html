@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #mapContainer{
+            padding: 10%;
+            height: 1000px;
+        }
+    </style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+
+</head>
+<body onload="initialize()">
+    <div id="mapContainer">
+
+    </div>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
+    <!-- Some other Maps -->
+    <!--<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>-->
+
+    <!--Kind of cool but looks blurry-->
+    <!--<script src="http://www.webglearth.com/v2/api.js"></script>-->
+
+      <!-- Leaflet Popup Modifier -->
+      <script src="popupMod.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="popupMod.css">
+
+      <!--Draw toolbar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
+    <!-- For loading in the map  geojson https://github.com/calvinmetcalf/leaflet-ajax/blob/gh-pages/dist/-->
+    <script src="leaflet.ajax.js"></script>
+    <!--------------------------------->
+    <script src="script.js"></script>
+
+    <!---------------->
+</body>
+
+</html>
