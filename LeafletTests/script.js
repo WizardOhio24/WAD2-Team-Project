@@ -100,7 +100,7 @@ var hoverStyle = {
     "fillOpacity": 0.5
 };
 
-var geojsonLayer = new L.GeoJSON.AJAX("http://0.0.0.0:8000/ShapeFileToJSON.geojson", {style: style});
+var geojsonLayer = new L.GeoJSON.AJAX("http://0.0.0.0:4000/ShapeFileToJSON.geojson", {style: style});
 //geojsonLayer.addTo(mymap);
 
 //var geojsonLayerE = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959Europe.geojson", {style: style});
@@ -112,7 +112,7 @@ var geojsonLayer = new L.GeoJSON.AJAX("http://0.0.0.0:8000/ShapeFileToJSON.geojs
 //var geojsonLayerME = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959ME.geojson", {style: style});
 //geojsonLayerME.addTo(mymap);
 
-var geojsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959Globe.geojson", {style: style});
+var geojsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:4000/gpm_3hr.20200221.235959Globe.geojson", {style: style});
 
 //These make the map run slow, they contain too much data
 //var CurWarningjsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:8000/CurrentWarnings.geojson", {style: WarningStyle});
@@ -122,14 +122,14 @@ var geojsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221
 // For the top right button, can add more here
 var overlayMaps = {
     "America Rain": geojsonLayer,
-    "Europe Rain": geojsonLayerE,
-    "Austrailian Rain": geojsonLayerAU,
-    "Middle East Rain": geojsonLayerME,
-    "Global Rain":geojsonLayerGlobe,
-    //"Current Warnings":CurWarningjsonLayerGlobe
-    "Fire Warnings": FireWarningjsonLayerGlobe
-    ,
+    "Global Rain":geojsonLayerGlobe,    
 }
+
+    //"Current Warnings":CurWarningjsonLayerGlobe
+    //"Fire Warnings": FireWarningjsonLayerGlobe
+        //"Europe Rain": geojsonLayerE,
+    //"Austrailian Rain": geojsonLayerAU,
+    //"Middle East Rain": geojsonLayerME,
 
     // This adds the actual overlay top right button to the map
     L.control.layers(null, overlayMaps).addTo(mymap);
