@@ -1,0 +1,22 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+{% block title_block %}
+	About WeatherSTUFF
+{% endblock %}
+
+{% block body_block %}
+	
+	<h1>About</h1>
+	<a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
+	<a href="{% url 'WeatherSTUFF:register' %}">Sign Up</a>
+	<div>
+		We are a group of university students who are interested in the impact
+		that climate change is having on the world.
+		Our aim is to connect people who are also enthusiastic about this
+		issue and give people a platform that they can post up to date
+		information on.  Systems that people could track include storms,
+		tornadoes, floods and wild fires.
+	</div>		
+			
+{% endblock %}
+

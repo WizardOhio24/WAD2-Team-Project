@@ -1,0 +1,14 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+{% block title_block %}
+    My Account
+{% endblock %}
+
+
+{% block body_block %}
+   <h1>My Account</h1>
+   <a href="{% url 'WeatherSTUFF:changedetails' %}">Change details</a>
+{% endblock %}
+
+
+   

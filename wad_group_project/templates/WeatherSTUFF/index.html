@@ -1,0 +1,18 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+
+{% block title_block %}
+	Homepage
+{% endblock %}
+
+{% block body_block %}
+
+	<h1>WeatherSTUFF</h1>
+	<a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
+	<a href="{% url 'WeatherSTUFF:register' %}">Sign Up</a>
+
+				
+{% endblock %}
+
+
+
