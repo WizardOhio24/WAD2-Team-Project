@@ -39,15 +39,13 @@ crossorigin=""/>
 {% endblock %}
 
 {% block body_block %}
-
-	<h1>WeatherSTUFF</h1>
+	<h1 class="pageTitle">WeatherSTUFF</h1>
+	<a href="{% url 'WeatherSTUFF:login' %}" class="button">Sign In</a>
+	<a href="{% url 'WeatherSTUFF:register' %}" class="button">Sign Up</a>
 
 	<div id="mapContainer">
 
 	</div>
-	<a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
-	<a href="{% url 'WeatherSTUFF:register' %}">Sign Up</a>
-
 				
 {% endblock %}
 
