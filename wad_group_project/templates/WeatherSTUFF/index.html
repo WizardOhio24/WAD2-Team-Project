@@ -1,13 +1,50 @@
 {% extends 'WeatherSTUFF/base.html' %}
-
+{% load staticfiles %}
 
 {% block title_block %}
 	Homepage
 {% endblock %}
 
+{% block head_block %}
+	<!--{% load static %}  Why is this not done in base? -->
+
+		
+	<!------------------ Leaflet Stuff --------------------------------->
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+
+	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
+    <!-- Some other Maps -->
+    <!--<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>-->
+
+    <!--Kind of cool but looks blurry-->
+    <!--<script src="http://www.webglearth.com/v2/api.js"></script>-->
+
+      <!-- Leaflet Popup Modifier -->
+      <script src="{% static 'js/popup/popupMod.js' %}"></script>
+      <link rel="stylesheet" href="{% static 'js/popup/popupMod.css' %}">
+
+      <!--Draw toolbar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
+    <!-- For loading in the map  geojson https://github.com/calvinmetcalf/leaflet-ajax/blob/gh-pages/dist/-->
+    <script src="{% static 'js/leaflet-ajax/leaflet.ajax.js' %}"></script>
+	<!-------------------------------------------------------------->
+
+	<script src="{% static 'js/script.js' %}"></script> 
+{% endblock %}
+
 {% block body_block %}
 
 	<h1>WeatherSTUFF</h1>
+
+	<div id="mapContainer">
+
+	</div>
 	<a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}">Sign Up</a>
 
