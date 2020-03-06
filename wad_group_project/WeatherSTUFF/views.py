@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from WeatherSTUFF.models import Pin, UserProfile
 
 def index(request):
 	return render(request, 'WeatherSTUFF/index.html')

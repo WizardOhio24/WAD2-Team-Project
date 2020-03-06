@@ -8,7 +8,7 @@ django.setup()
 import datetime
 from django.utils import timezone
 import pytz
-from WeatherSTUFF.models import User_Profile, Pin
+from WeatherSTUFF.models import UserProfile, Pin
 import random
 
 def populate():
@@ -87,12 +87,12 @@ def populate():
         for p in user_data['pins']:
             add_pin(u, p)
 
-    for c in User_Profile.objects.all():
+    for c in UserProfile.objects.all():
         for p in Pin.objects.filter(user = c):
             print(f' - {c}: {p}')
 
 def add_user(user):
-    u = User_Profile.objects.get_or_create(username=user)[0]
+    u = UserProfile.objects.get_or_create(username=user)[0]
     u.save()
     return u
 

@@ -1,6 +1,10 @@
 from django.contrib import admin
-from WeatherSTUFF.models import User_Profile, Pin
+from WeatherSTUFF.models import UserProfile, Pin
 
 # Register your models here.
-admin.site.register(User_Profile)
-admin.site.register(Pin)
+
+class PinAdmin(admin.ModelAdmin):
+    list_display = ('title', 'rating', 'num_ratings')
+
+admin.site.register(UserProfile)
+admin.site.register(Pin, PinAdmin)
