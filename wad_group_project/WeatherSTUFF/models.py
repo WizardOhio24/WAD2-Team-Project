@@ -4,8 +4,8 @@ from django.db import models
 class User_Profile(models.Model):
     username = models.CharField(max_length=50, unique=True)
 
-    email = models.EmailField()
-    fav_places = models.TextField()
+    email = models.EmailField(blank = True)
+    fav_places = models.TextField(blank = True)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
 
     class Meta:
@@ -31,4 +31,4 @@ class Pin(models.Model):
     content = models.TextField(max_length=CONTENT_MAX_LENGTH)
 
     def __str__(self):
-        return self.title + "; pin_id=" + id
+        return self.title 
