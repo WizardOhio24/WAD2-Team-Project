@@ -9,7 +9,11 @@ import datetime
 from django.utils import timezone
 import pytz
 from WeatherSTUFF.models import UserProfile, Pin
+from django.contrib.auth.models import User
 import random
+from django.db import IntegrityError
+
+DUMMY_PASSWORD = "XXX"
 
 def populate():
 
@@ -73,17 +77,17 @@ def populate():
          },
     ]
 
-    users = {'Richard': {'pins': user_A_pins},
-             'Kieran': {'pins': user_B_pins},
-             'David': {'pins': user_C_pins},
-             'Mia': {'pins': user_D_pins}
+    users = {'richard': {'pins': user_A_pins, 'f_name': 'Richard', 'l_name': 'Menzies', 'email': 'richard@menzies.com'},
+             'kieran': {'pins': user_B_pins, 'f_name': 'Kieran', 'l_name': 'Grant', 'email': 'kieran@grant.org'},
+             'david': {'pins': user_C_pins, 'f_name': 'David', 'l_name': 'O\'Neill', 'email': 'david@oneill.gov'},
+             'mia': {'pins': user_D_pins, 'f_name': 'Mia', 'l_name': 'Stevenson', 'email': 'mia@stevenson.co.uk'}
     }
 
     # The code below goes through the users dictionary, then adds each category, 
     # and then adds all the associated pages for that category.
 
     for user, user_data in users.items():
-        u = add_user(user)
+        u = add_user(user, user_data)
         for p in user_data['pins']:
             add_pin(u, p)
 
@@ -91,18 +95,26 @@ def populate():
         for p in Pin.objects.filter(user = c):
             print(f' - {c}: {p}')
 
-def add_user(user):
-    u = UserProfile.objects.get_or_create(username=user)[0]
-    u.save()
-    return u
+def add_user(user, user_data):
+    f_name = user_data['f_name']
+    l_name = user_data['l_name']
+    email = user_data['email']
+
+    t = User.objects.get_or_create(username=user,email=email,password=DUMMY_PASSWORD)[0]
+    s = UserProfile.objects.get_or_create(user=t)[0]
+    s.save()
+    return s
+
+
 
 def add_pin(u, data):
-    d = data['date']
-    x = data['x_val']
-    y = data['y_val']
-    t = data['title']
-    c = data['content']
-    p = Pin.objects.get_or_create(user=u,date=d,x_val=x,y_val=y, title=t, content=c)[0]
+    p = Pin.objects.get_or_create(user=u,
+                                  date=data['date'],
+                                  x_val=data['x_val'],
+                                  y_val=data['y_val'], 
+                                  title=data['title'], 
+                                  content=data['content'])[0]
+
     p.rating = data['rating']
     p.num_ratings = data['num_ratings']
 
@@ -110,13 +122,12 @@ def add_pin(u, data):
     return p
 
 def generate_date():
-    y = random.randint(2010, 2020)
-    m = random.randint(1,11)
-    d = random.randint(1,28)
-    h= random.randint(0,23) 
-    m= random.randint(0,59)
-    tz= pytz.UTC
-    return datetime.datetime(year=y,month=random.randint(1,12),day=d,hour=h,minute=m, tzinfo=tz)
+    return datetime.datetime(year=random.randint(2010, 2020),
+                             month=random.randint(1,12),
+                             day=random.randint(1,28),
+                             hour=random.randint(0,23),
+                             minute=random.randint(0,59), 
+                             tzinfo=pytz.UTC)
 
     
 if __name__ == '__main__':

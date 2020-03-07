@@ -1,10 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class UserProfile(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-
-    email = models.EmailField(blank = True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
     fav_places = models.TextField(blank = True)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
 
@@ -12,7 +12,7 @@ class UserProfile(models.Model):
         verbose_name_plural = 'UserProfiles'
 
     def __str__(self):
-        return self.username
+        return self.user.username
 
 
 class Pin(models.Model):
