@@ -1,7 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.core import serializers
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+
+from WeatherSTUFF.forms import UserForm, UserProfileForm
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 import datetime
 
@@ -46,7 +52,7 @@ def add_pin(request):
         title = request.POST['title'], \
         content = request.POST['content'], \
         )
-        p.save();
+        p.save()
         return HttpResponse(status=201)
 
 def get_pins(request):
