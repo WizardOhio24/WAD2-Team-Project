@@ -17,7 +17,7 @@ from WeatherSTUFF.models import Pin, UserProfile
 from WeatherSTUFF.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
