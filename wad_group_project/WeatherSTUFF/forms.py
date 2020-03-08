@@ -1,6 +1,6 @@
 
 from django import forms
-from WeatherSTUFF import UserProfile
+from WeatherSTUFF.models import UserProfile
 from django.contrib.auth.models import User
 
 class UserForm(forms.ModelForm):

@@ -13,6 +13,13 @@ import datetime
 
 from WeatherSTUFF.models import Pin, UserProfile
 
+#imports for user authentication
+from WeatherSTUFF.forms import UserForm, UserProfileForm
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.decorators import login_required
+
+
 def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
@@ -26,7 +33,34 @@ def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
 
 def sign_up(request):
-	return render(request, 'WeatherSTUFF/register.html')
+	registered = False
+
+	if request.method == 'POST':
+		user_form = UserForm(request.POST)
+		profile_form = UserProfileForm(request.POST)
+
+		if user_form.is_valid() and profile_form.is_valid():
+			user = user_form.save()
+			user.set_password(user.password)
+			user.save()
+
+			profile = profile_form.save(commit = False)
+			profile.user = user
+			
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES('picture')
+				profile.save()
+
+				registered = True
+		else:
+			print(user_form.errors, profile_form.errors)
+	else:
+		user_form = UserForm()
+		profile_form = UserProfileForm()
+
+	return render(request, 'WeatherStuff/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
+			
+
 
 def sign_in(request):
 	return render(request, 'WeatherSTUFF/login.html')
