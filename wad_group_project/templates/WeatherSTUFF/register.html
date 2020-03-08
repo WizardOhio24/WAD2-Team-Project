@@ -1,9 +1,29 @@
 {% extends 'WeatherSTUFF/base.html' %}
+{ % load staticfiles %}
 
 {% block title_block %}
     Register
 {% endblock %}
 
 {% block body_block %}
-<h1 class="pageTitle">Register for WeatherSTUFF</h1>
+<h1>Register for WeatherSTUFF</h1>
+{% if registered %}
+<strong> You are already registered!</strong>
+<a href = "{% url 'WeatherSTUFF:index' %}">Return to the homepage.</a></br />
+{% else %}
+    <strong>Register here!</strong><br />
+<form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:register' %}"
+    enctype = "multipart/form-data">
+
+    {% csrf_token %}
+
+    <!-- Display each form -->
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+
+    <!-- Provide a button to click the submit the form. -->
+    <input type = "submit" name = "submit" value = "Register" />
+</form>
+{% endif %}
+{% endblock %}
 {% endblock %}
