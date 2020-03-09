@@ -20,10 +20,10 @@
     <body>
             <div class="navBar" id="navigationBar">        
             
-            <a href="{% url 'WeatherSTUFF:index' %}">Home</a>
-            <a href="{% url 'WeatherSTUFF:about' %}">About</a>
-            <a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
-            <a href="{% url 'WeatherSTUFF:myaccount' %}" >My Account</a>
+            <a href="{% url 'WeatherSTUFF:index' %}" class="button" id="active">Home</a>
+            <a href="{% url 'WeatherSTUFF:about' %}" class="button" id="notActive">About</a>
+            <a href="{% url 'WeatherSTUFF:login' %}" class="button" id="notActive">Sign In</a>
+            <a href="{% url 'WeatherSTUFF:myaccount' %}" class="button" id="notActive">My Account</a>
         </div>
 
         <div>

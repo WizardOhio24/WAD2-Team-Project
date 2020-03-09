@@ -2,4 +2,8 @@
     padding: 10%;
     height: 30vh;
     width: 50%;
+    position: relative;
+    top: 100px;
+    right: 50px;
+
 }
