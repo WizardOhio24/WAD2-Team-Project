@@ -15,7 +15,7 @@
 integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
 crossorigin=""/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
-	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+	<!--<link rel="stylesheet" href="{% static 'css/style.css' %}"/>-->
 
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
     <!-- Some other Maps -->
@@ -40,14 +40,15 @@ crossorigin=""/>
 
 {% block body_block %}
 
-	<h1>WeatherSTUFF</h1>
+	<h1 class="pageTitle">WeatherSTUFF</h1>
+
+	
+	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
+	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
 
 	<div id="mapContainer">
 
 	</div>
-	<a href="{% url 'WeatherSTUFF:login' %}">Sign In</a>
-	<a href="{% url 'WeatherSTUFF:register' %}">Sign Up</a>
-
 				
 {% endblock %}
 
