@@ -59,9 +59,6 @@ def sign_up(request):
 		profile_form = UserProfileForm()
 
 	return render(request, 'WeatherStuff/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
-			
-			
-
 
 def sign_in(request):
 	if request.method == 'POST':
@@ -120,21 +117,5 @@ def get_pins(request):
 
     pin_data = serializers.serialize('json', Pin.objects.all())
     return HttpResponse(pin_data, content_type='application/json')
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user = authenticate(username = username, password = password)
-
-		if user:
-			if user.is_active:
-				login(request, user)
-				return redirect(reverse('WeatherSTUFF:index'))
-			else:
-				return HttpResponse("Your account has been disabled.")
-		else:
-			print("Invalid login details: {username}, {password}")
-			return render(request, 'WeatherStuff/login.html')
-	else:
-		return render(request, 'WeatherStuff/login.html')
 
 
