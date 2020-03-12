@@ -1,4 +1,4 @@
- 
+
 // Adding nametag labels to all popup-able leaflet layers
 const sourceTypes = ['Layer','Circle','CircleMarker','Marker','Polyline','Polygon','ImageOverlay','VideoOverlay','SVGOverlay','Rectangle','LayerGroup','FeatureGroup','GeoJSON']
 
@@ -12,6 +12,7 @@ sourceTypes.forEach( type => {
 L.Popup.mergeOptions({
    removable: false,
    editable: false,
+   title: "",
 })
 
 // Modifying the popup mechanics
@@ -28,6 +29,24 @@ L.Popup.include({
          ' leaflet-zoom-animated');
 
       var wrapper = this._wrapper = L.DomUtil.create('div', prefix + '-content-wrapper', container);
+
+      // Added
+      //var title = this._title = L.DomUtil.create('b', prefix + '-content', wrapper);
+      //title.innerHTML = "Some title";
+
+      // New additions
+      console.log(this.options);
+      if(this.options.title){
+        console.log(this.options.title);
+        // Add a title in bold at the top of the container
+        var title = this._title = L.DomUtil.create('b', prefix + '-content', wrapper); // Change this css to look better
+        title.innerHTML = this.options.title;
+      }
+
+      //------------
+
+      //
+
       this._contentNode = L.DomUtil.create('div', prefix + '-content', wrapper);
 
       L.DomEvent.disableClickPropagation(wrapper);
@@ -46,6 +65,7 @@ L.Popup.include({
       }
 
       //  ----------------    Source code  ---------------------------- //
+
 
 
       //  ---------------    My additions  --------------------------- //
@@ -100,6 +120,13 @@ L.Popup.include({
 
       var wrapper = this._wrapper;
       var editScreen = this._editScreen = L.DomUtil.create('div', 'leaflet-popup-edit-screen', wrapper)
+
+      // Added
+      var titleField = this._titleField = L.DomUtil.create('div', 'leaflet-popup-input', editScreen);
+      titleField.setAttribute("contenteditable", "true");
+      titleField.innerHTML = this._title.innerHTML;
+      //
+
       var inputField = this._inputField = L.DomUtil.create('div', 'leaflet-popup-input', editScreen);
       inputField.setAttribute("contenteditable", "true");
       inputField.innerHTML = this.getContent()

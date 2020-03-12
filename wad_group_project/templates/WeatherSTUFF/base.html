@@ -4,22 +4,26 @@
 <html>
     <head lang = "en">
         <link  rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"/>
-       
+
         <meta charset = "UTF-8" />
         <title>WeatherSTUFF -
                {% block title_block %}
-                    
+
                {% endblock %}
 
         </title>
 
+        <!-- Use ajax to send data from javascript to django database (POST/GET requests for pins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
         {% block head_block %}
-                    
+
         {% endblock %}
-    </head> 
+    </head>
     <body>
-            <div class="navBar" id="navigationBar">        
-            
+            <div class="navBar" id="navigationBar">
+
             <a href="{% url 'WeatherSTUFF:index' %}" class="button">Home</a>
             <a href="{% url 'WeatherSTUFF:about' %}" class="button">About</a>
             <a href="{% url 'WeatherSTUFF:login' %}" class="button">Sign In</a>
@@ -30,7 +34,7 @@
             {% block body_block %}
             {% endblock %}
         </div>
-     
+
     </body>
-    
+
 </html>

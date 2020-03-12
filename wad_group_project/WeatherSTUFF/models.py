@@ -31,4 +31,4 @@ class Pin(models.Model):
     content = models.TextField(max_length=CONTENT_MAX_LENGTH)
 
     def __str__(self):
-        return self.title 
+        return self.title

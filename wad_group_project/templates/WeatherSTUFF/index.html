@@ -8,7 +8,7 @@
 {% block head_block %}
 	<!--{% load static %}  Why is this not done in base? -->
 
-		
+
 	<!------------------ Leaflet Stuff --------------------------------->
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -31,26 +31,25 @@ crossorigin=""/>
       <!--Draw toolbar-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
     <!-- For loading in the map  geojson https://github.com/calvinmetcalf/leaflet-ajax/blob/gh-pages/dist/-->
-    <script src="{% static 'js/leaflet-ajax/leaflet.ajax.js' %}"></script>
+  <!--  <script src="{% static 'js/leaflet-ajax/leaflet.ajax.js' %}"></script>-->
 	<!-------------------------------------------------------------->
 
-	<script src="{% static 'js/script.js' %}"></script> 
+	<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
 
 	<h1 class="pageTitle">WeatherSTUFF</h1>
 
-	
+
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
-
+	{% csrf_token%}
 	<div id="mapContainer">
 
 	</div>
-				
+
 {% endblock %}
-
-
-
