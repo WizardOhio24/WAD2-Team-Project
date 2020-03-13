@@ -6,13 +6,11 @@
 
 
 {% block body_block %}
-<h1 class="pageTitle">My Account</h1>
-
-   <div class="description" id="myAccount">
+<h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
     
     {% if user.is_authenticated %} 
-        Welcome {{ user.username }}!
-        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox'>Change details</a>
+        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change details</a>   
+       
     {% else %}
         Have an accont? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>

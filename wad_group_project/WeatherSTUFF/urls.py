@@ -12,4 +12,5 @@ urlpatterns = [ path('', views.index, name='index'),
                 path('logout/', views.user_logout, name = 'logout'),
                 path('add_pin/', views.add_pin, name='add_pin'),
                 path('get_pins/', views.get_pins, name='get_pins'),
+               
              ]

@@ -48,6 +48,22 @@ body{
     top: 100px;
 }
 
+#user_form{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    float: left;
+    background-color:rgb(62, 70, 87);
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    position:relative;
+    top:230px;
+    right:100px;
+    padding: 20px 40px;
+    font-size:20px;
+    
+
+}
+
 #submitButton{
     float:none;
     width: 20%;
@@ -56,6 +72,12 @@ body{
     top:450px;
     font-size:20px;
 
+}
+
+#registerButton{
+    float:none;
+    width:50%;
+    left:175px;
 }
 
 .navBar .button{
@@ -72,25 +94,12 @@ body{
     
 }
 
-.authenticatedNavBar .button{
-    background-color: #81A1C1;
-    float: left;
-    display: block;
-    color: white;
-    text-align: center;
-    width:20%;
-    padding: 14px 0px;
-    text-decoration: none;
-    font-size: 20px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    
-}
 
-.authenticatedNavBar,navBar a:hover{
+.navBar a:hover{
     background-color: #BF616A;
 }
 
-.autenticatedNavBar,navBar a:active {
+.navBar a:active {
     background-color: #BF616A;
 }
 
@@ -128,6 +137,18 @@ body{
     width: 10%;
 }
 
+#submitButton{
+    width:50%;
+    position:abosolute;
+    bottom:1500px;
+}
+
+#returnButton{
+    position:relative;
+    top:200px;
+    right:550px;
+}
+
 
 .description{
     color:white;
@@ -139,17 +160,43 @@ body{
     float:left;
 }
 
+#accountRegistered{
+    text-align: center;
+    position:relative;
+    left:460px;
+    top:100px;
+}
+
+#changeButton{
+    width:10%;
+    position:relative;
+    float:right;
+    margin-right:10px;
+    
+}
+
 #myAccount{
     position:relative;
-    top: 100px;
-    right:700px;
+    width:15%;
+    text-align:center;
+    left:500px;
+    top:50px;
+
 }
+
+#welcome{
+    position:relative;
+    left:250px;
+    top:150px;
+}
+
 
 #smallLink{
     float:none;
     position:static;
     padding:5px 5px;
     width:30%;
+    
 }
 
 

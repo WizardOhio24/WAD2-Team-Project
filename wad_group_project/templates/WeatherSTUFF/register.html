@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block body_block %}
-<h1 class="pageTitle" id="userAuthenticationTitle">Register for WeatherSTUFF</h1>
+
 {% if registered %}
-<strong class="description" id="myAccount"> Thank you for registering! </strong>
-<a href = "/" class="buttonBox">Return to the homepage.</a></br />
+<strong class="description" id="accountRegistered">Thank you for registering!</strong>
+<a href = "/" class="buttonBox" id="returnButton">Return to the homepage.</a></br />
 {% else %}
-    <strong>Register here!</strong><br />
+<h1 class="pageTitle" id="userAuthenticationTitle">Register for WeatherSTUFF</h1> 
 <form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:register' %}"
     enctype = "multipart/form-data">
 
@@ -22,7 +22,7 @@
     {{ profile_form.as_p }}
 
     <!-- Provide a button to click the submit the form. -->
-    <input type = "submit" name = "submit" value = "Register" />
+    <input type="submit" name="submit" value="Register" class="buttonBox" id="registerButton"/>
 </form>
 {% endif %}
 {% endblock %}

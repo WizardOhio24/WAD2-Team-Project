@@ -29,6 +29,7 @@ def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
 
 def sign_up(request):
+
 	registered = False
 
 	if request.method == 'POST':
@@ -68,13 +69,18 @@ def sign_in(request):
 			if user.is_active:
 				login(request, user)
 				return redirect(reverse('WeatherSTUFF:index'))
+				
+				
 			else:
 				return HttpResponse("Your account has been disabled.")
 		else:
 			print(f"Invalid login details: {username}, {password}")
 			return render(request, 'WeatherSTUFF/login.html')
+			
 	else:
+		
 		return render(request, 'WeatherSTUFF/login.html')
+
 
 @login_required
 def restricted(request):
@@ -85,7 +91,7 @@ def user_logout(request):
 	logout(request)
 	return redirect(reverse('WeatherSTUFF:index'))
 
-# Recieve a pin post request, save pin to server
+# Receive a pin post request, save pin to server
 def add_pin(request):
     if request.method == 'POST':
         datenow = datetime.datetime.now() # python wants the date in an exact format
