@@ -57,7 +57,7 @@ def sign_up(request):
 	return render(request, 'WeatherSTUFF/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
 
 def sign_in(request):
-
+	
 	if request.method == 'POST':
 		
 		username = request.POST.get('username')
@@ -72,7 +72,7 @@ def sign_in(request):
 				return HttpResponse("Your account has been disabled.")
 		else:
 			print(f"Invalid login details: {username}, {password}")
-			return render(request, 'WeatherStuff/login.html')
+			return render(request, 'WeatherSTUFF/login.html')
 	else:
 		return render(request, 'WeatherSTUFF/login.html')
 

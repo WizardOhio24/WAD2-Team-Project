@@ -58,9 +58,7 @@ body{
 
 }
 
-
-
-.button{
+.navBar .button{
     background-color: #81A1C1;
     float: left;
     display: block;
@@ -74,11 +72,25 @@ body{
     
 }
 
-.navBar a:hover{
+.authenticatedNavBar .button{
+    background-color: #81A1C1;
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    width:20%;
+    padding: 14px 0px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+
+.authenticatedNavBar,navBar a:hover{
     background-color: #BF616A;
 }
 
-.navBar a:active {
+.autenticatedNavBar,navBar a:active {
     background-color: #BF616A;
 }
 
