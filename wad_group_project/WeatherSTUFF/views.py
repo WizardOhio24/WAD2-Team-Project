@@ -48,10 +48,10 @@ def sign_up(request):
 			profile.user = user
 			
 			if 'picture' in request.FILES:
-				profile.picture = request.FILES('picture')
-				profile.save()
+				profile.picture = request.FILES['picture']
+			profile.save()
 
-				registered = True
+			registered = True
 		else:
 			print(user_form.errors, profile_form.errors)
 	else:
@@ -62,6 +62,7 @@ def sign_up(request):
 
 def sign_in(request):
 	if request.method == 'POST':
+		print("view accessed")
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username = username, password = password)
@@ -73,7 +74,7 @@ def sign_in(request):
 			else:
 				return HttpResponse("Your account has been disabled.")
 		else:
-			print("Invalid login details: {username}, {password}")
+			print(f"Invalid login details: {username}, {password}")
 			return render(request, 'WeatherStuff/login.html')
 	else:
 		return render(request, 'WeatherStuff/login.html')

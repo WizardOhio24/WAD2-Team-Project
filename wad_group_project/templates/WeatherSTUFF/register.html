@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Register for WeatherSTUFF</h1>
+<h1 class="pageTitle" id="userAuthenticationTitle">Register for WeatherSTUFF</h1>
 {% if registered %}
-<strong> Thank you for registering! </strong>
-<a href = "{% url 'WeatherSTUFF:index' %}">Return to the homepage.</a></br />
+<strong class="description" id="myAccount"> Thank you for registering! </strong>
+<a href = "{% url 'WeatherSTUFF:index' %}" class="buttonBox">Return to the homepage.</a></br />
 {% else %}
     <strong>Register here!</strong><br />
 <form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:register' %}"

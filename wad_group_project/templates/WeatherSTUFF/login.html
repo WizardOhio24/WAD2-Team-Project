@@ -7,13 +7,18 @@
 
 {% block body_block %}
 
-<h1>Sign In</h1>
+<h1 class="pageTitle" id="userAuthenticationTitle">Sign In</h1>
 <form id = "login_form" method = "post" action = "{% url 'WeatherSTUFF:login' %}">
     {% csrf_token %}
-    Username: <input type = "text" name = "username" value = "" size = "50" />
+    Username:
     <br />
-    Password: <input type = "password" name = "password" value = "" size = "50" />
+    <input class="textBox" type = "text" name = "username" value = "" size = "50" />
     <br />
-    <input type = "submit" value = "submit" />
+    Password:
+    <br />
+    <input class="textBox" type = "password" name = "password" value = "" size = "50" />
+    <br />
+    
 </form>
+<input class="buttonBox" id="submitButton" type = "submit" value = "Sign IN" />
 {% endblock %}

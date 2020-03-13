@@ -7,14 +7,16 @@
 
 {% block body_block %}
 <h1 class="pageTitle">My Account</h1>
-   <div>
+
+   <div class="description" id="myAccount">
+    
     {% if user.is_authenticated %} 
         Welcome {{ user.username }}!
         <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox'>Change details</a>
     {% else %}
-        Have an accont? Login here <a href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
+        Have an accont? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>
-        Create an Account here <a href = "{% url 'WeatherSTUFF:register' %}">Register</a>
+        Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Register</a>
     {% endif %} <br />
     <strong>{{ boldmessage }}</strong><br />
 </div>
