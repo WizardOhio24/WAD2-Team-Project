@@ -58,15 +58,16 @@ def sign_up(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 
-	return render(request, 'WeatherStuff/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
+	return render(request, 'WeatherSTUFF/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
 
 def sign_in(request):
+
 	if request.method == 'POST':
-		print("view accessed")
+		
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username = username, password = password)
-
+		
 		if user:
 			if user.is_active:
 				login(request, user)
@@ -77,11 +78,11 @@ def sign_in(request):
 			print(f"Invalid login details: {username}, {password}")
 			return render(request, 'WeatherStuff/login.html')
 	else:
-		return render(request, 'WeatherStuff/login.html')
+		return render(request, 'WeatherSTUFF/login.html')
 
 @login_required
 def restricted(request):
-	return render(request, 'WeatherStuff/changedetails.html')
+	return render(request, 'WeatherSTUFF/changedetails.html')
 
 @login_required
 def user_logout(request):
