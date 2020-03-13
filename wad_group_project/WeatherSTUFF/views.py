@@ -4,10 +4,6 @@ from django.core import serializers
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 
-from WeatherSTUFF.forms import UserForm, UserProfileForm
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 
 import datetime
 
