@@ -6,18 +6,44 @@
 
 
 {% block body_block %}
-<h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
+
     
     {% if user.is_authenticated %} 
+        <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
         <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change details</a>   
-       
+
+        <div id="favouritePlaces">
+            Favourite Places <a href="" id="addButton">+</a>
+
+            <div class="listDiv">
+                
+            </div>
+
+        </div>
+
+        <div id="pins">
+            Pins
+
+            <div class="listDiv" id="listPins">
+
+            </div>
+        </div>
+
+
+
+
+
     {% else %}
+    <div class="description">
         Have an accont? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>
         Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Register</a>
+     
+    </div>
     {% endif %} <br />
-    <strong>{{ boldmessage }}</strong><br />
-</div>
+
+    
+
    
 {% endblock %}
 

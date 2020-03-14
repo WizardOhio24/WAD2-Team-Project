@@ -13,8 +13,7 @@ body{
 }
 
 #navigationBar{
-    width:100%;
-    
+    width:100%;   
 }
 
 #login_form{
@@ -28,8 +27,7 @@ body{
     top:230px;
     left: 30px;
     padding: 20px 40px;
-    font-size:20px;
-    
+    font-size:20px; 
 }
 
 .textBox{
@@ -37,7 +35,6 @@ body{
     margin-top: 10px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 20px;
-
 }
 
 #userAuthenticationTitle{
@@ -60,8 +57,6 @@ body{
     right:100px;
     padding: 20px 40px;
     font-size:20px;
-    
-
 }
 
 #submitButton{
@@ -71,7 +66,6 @@ body{
     right:390px;
     top:450px;
     font-size:20px;
-
 }
 
 #registerButton{
@@ -90,8 +84,7 @@ body{
     padding: 14px 0px;
     text-decoration: none;
     font-size: 20px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;   
 }
 
 
@@ -171,8 +164,7 @@ body{
     width:10%;
     position:relative;
     float:right;
-    margin-right:10px;
-    
+    margin-right:10px;   
 }
 
 #myAccount{
@@ -181,7 +173,6 @@ body{
     text-align:center;
     left:500px;
     top:50px;
-
 }
 
 #welcome{
@@ -196,7 +187,68 @@ body{
     position:static;
     padding:5px 5px;
     width:30%;
-    
 }
 
+#favouritePlaces{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    float: left;
+    background-color:rgb(62, 70, 87);
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    padding: 20px 40px;
+    font-size:20px;
+    text-align:left;
+    position:relative;
+    top:200px;
+    right:150px;
+    width:30%;
+    height:220px;
+}
+
+.listDiv{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    padding: 20px 40px;
+    font-size:20px;
+    text-align:left;
+    width:80%;
+    height:55%;
+    margin-top: 20px;
+}
+
+#addButton{
+    float:right;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    font-size:30px;
+    text-decoration: none;
+    padding:14px 10px;
+    position: relative;
+    bottom:20px;
+}
+
+#pins{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    float: right;
+    background-color:rgb(62, 70, 87);
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    padding: 20px 40px;
+    font-size:20px;
+    text-align:center;
+    position:relative;
+    top:163px;
+    right:200px;
+    width:20%;
+    height:300px;
+}
+
+#listPins{
+    position:relative;
+    right:15px;
+}
 
