@@ -20,7 +20,7 @@ def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
 def my_account(request):
-
+	
 	return render(request, 'WeatherSTUFF/myaccount.html')
 
 def change_details(request):
