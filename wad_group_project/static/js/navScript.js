@@ -9,7 +9,9 @@ function navButton(){
 
         if(navigationButtons[i].href == curURL){
           // Then we mush be on that page, so add 'current' class to the nav button
+          navigationButtons[0].className="navButton";
           navigationButtons[i].className = "navButton Current";
+          
         }
     }
 }
