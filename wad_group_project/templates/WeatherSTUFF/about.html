@@ -7,8 +7,11 @@
 {% block body_block %}
 
 	<h1 class="pageTitle">About</h1>
+	{% if user.is_authenticated %}
+	{% else %}
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
+	{% endif %}
 	<div class="description">
 		We are a group of university students who are interested in the impact
 		that climate change is having on the world.

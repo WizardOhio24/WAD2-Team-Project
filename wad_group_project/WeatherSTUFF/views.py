@@ -24,10 +24,33 @@ def my_account(request):
 	return render(request, 'WeatherSTUFF/myaccount.html')
 
 def change_details(request):
-	return render(request, 'WeatherSTUFF/changedetails.html')
+	if request.method=="POST":
+		edit_form = UserForm(request.POST)
+		profile_form = UserProfileForm(request.POST)
+
+		if edit_form.is_valid() and profile_form.is_valid():
+			user = edit_form.save()
+			user.set_password(user.password)
+			user.save()
+
+			profile = profile_form.save(commit = False)
+			profile.user = user
+			
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES['picture']
+			profile.save()
+
+		else:
+				print(edit_form.errors, profile_form.errors)
+	else:
+		edit_form = UserForm()
+		profile_form = UserProfileForm()
+		
+	return render(request, 'WeatherSTUFF/changedetails.html', context = {'user_form':edit_form, 'profile_form': profile_form})
 
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
+	
 
 def sign_up(request):
 
@@ -50,12 +73,14 @@ def sign_up(request):
 			profile.save()
 
 			registered = True
+
+			login(request, user)
 		else:
 			print(user_form.errors, profile_form.errors)
 	else:
 		user_form = UserForm()
 		profile_form = UserProfileForm()
-
+	
 	return render(request, 'WeatherSTUFF/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
 
 def sign_in(request):

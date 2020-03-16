@@ -5,8 +5,24 @@
 {% endblock %}
 
 
-{% block body_block %}
+{% block body_block %}  
+   <div class="userDetails">
+        {{ user.username }}
+   </div>
    <h1 class="pageTitle" id="userAuthenticationTitle">Change details</h1>
+
+
+   <form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:changedetails' %}"
+    enctype = "multipart/form-data">
+
+    {% csrf_token %}
+    <!-- Display each form -->
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+
+    <!-- Provide a button to click the submit the form. -->
+    <input type="submit" name="submit" value="Update" class="buttonBox" id="updateButton"/>
+</form>
 {% endblock %}
 
 

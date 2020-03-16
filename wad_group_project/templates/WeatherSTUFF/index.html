@@ -44,9 +44,11 @@ crossorigin=""/>
 
 	<h1 class="pageTitle">WeatherSTUFF</h1>
 
-
+	{% if user.is_authenticated %}
+	{% else %}
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
+	{% endif %}
 	{% csrf_token%}
 	<div id="mapContainer">
 
