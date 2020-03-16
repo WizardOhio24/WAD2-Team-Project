@@ -2,14 +2,14 @@ document.addEventListener("DOMContentLoaded", navButton);
 
 function navButton(){
     navigationButtons = document.getElementsByClassName("navButton");
-    
+
+    curURL = document.URL; //window.location.href is the same thing
+
     for(var i = 0;i<navigationButtons.length;i++){
-      
-        navigationButtons[i].addEventListener("click", function(){  
-            
-            document.getElementsByClassName("navButton Current")[0].className="navButton";
-            this.className = "navButton Current";
-        
-        })
+
+        if(navigationButtons[i].href == curURL){
+          // Then we mush be on that page, so add 'current' class to the nav button
+          navigationButtons[i].className = "navButton Current";
+        }
     }
 }

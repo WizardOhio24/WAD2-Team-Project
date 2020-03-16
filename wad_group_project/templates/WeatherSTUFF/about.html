@@ -1,11 +1,11 @@
 {% extends 'WeatherSTUFF/base.html' %}
 
 {% block title_block %}
-	About WeatherSTUFF
+	About
 {% endblock %}
 
 {% block body_block %}
-	
+
 	<h1 class="pageTitle">About</h1>
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
@@ -16,7 +16,6 @@
 		issue and give people a platform that they can post up to date
 		information on.  Systems that people could track include storms,
 		tornadoes, floods and wild fires.
-	</div>		
-			
-{% endblock %}
+	</div>
 
+{% endblock %}

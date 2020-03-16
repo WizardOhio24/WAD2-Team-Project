@@ -24,30 +24,30 @@
     <body>
         <div class="navBar">
         {% if user.is_authenticated %}
-     
-            <a href="/" class="navButton Current">Home</a>
+
+            <a href="/" class="navButton">Home</a>
             <a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a>
             <a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a>
             <a href="{% url 'WeatherSTUFF:logout' %}" class="navButton">Logout</a>
-    
+
         {% else %}
-     
-            <a href="/" class="navButton Current">Home</a>
+
+            <a href="/" class="navButton">Home</a>
             <a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a>
             <a href="{% url 'WeatherSTUFF:login' %}" class="navButton">Sign In</a>
             <a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a>
-        
+
         {% endif %}
 
-        
+
 
         </div>
-        
+
 
         <div>
             {% block body_block %}
             {% endblock %}
-        </div>   
+        </div>
 
     </body>
 
