@@ -20,8 +20,10 @@ def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
 def my_account(request):
-	
-	return render(request, 'WeatherSTUFF/myaccount.html')
+	user = UserProfile.objects.filter(user=request.user)[0]
+	pins = Pin.objects.filter(user=user)
+
+	return render(request, 'WeatherSTUFF/myaccount.html', context={'fav_places':user.fav_places.split(','), 'pins':pins})
 
 def change_details(request):
 	if request.method=="POST":
@@ -100,12 +102,11 @@ def sign_in(request):
 			else:
 				return HttpResponse("Your account has been disabled.")
 		else:
-			print(f"Invalid login details: {username}, {password}")
-			return render(request, 'WeatherSTUFF/login.html')
+			return render(request, 'WeatherSTUFF/login.html', context={"message":"Invalid login details, please try again"})
 			
 	else:
 		
-		return render(request, 'WeatherSTUFF/login.html')
+		return render(request, 'WeatherSTUFF/login.html', context={})
 
 
 @login_required

@@ -10,6 +10,9 @@
 <h1 class="pageTitle" id="userAuthenticationTitle">Sign In</h1>
 <form id="login_form" method="post" action="{% url 'WeatherSTUFF:login' %}">
     {% csrf_token %}
+    {% if message %}
+    {{ message }}
+    {% endif %}<br />  
 
     Username:
     <br />

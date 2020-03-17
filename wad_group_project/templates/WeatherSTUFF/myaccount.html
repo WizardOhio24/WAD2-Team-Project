@@ -16,16 +16,19 @@
             Favourite Places <a href="" id="addButton">+</a>
 
             <div class="listDiv">
-                {{ user.fav_places }}
+               {% for fav_place in fav_places %}
+                   {{ fav_place }}
+               {% endfor %}
             </div>
-
         </div>
 
         <div id="pins">
             Pins
-
             <div class="listDiv" id="listPins">
-    
+                {% for pin in pins %}
+                    {{ pin.title }}
+                    {{ pin.content }}
+                {% endfor %}
             </div>
         </div>
 
