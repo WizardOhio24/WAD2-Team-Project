@@ -10,7 +10,9 @@
     
     {% if user.is_authenticated %} 
         <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
-        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change details</a>   
+        <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="deleteAccountButton">Delete Account</a>
+        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change Details</a>
+
 
         <div id="favouritePlaces">
             Favourite Places <a href="" id="addButton">+</a>

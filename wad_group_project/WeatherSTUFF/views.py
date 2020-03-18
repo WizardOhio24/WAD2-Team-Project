@@ -25,6 +25,7 @@ def my_account(request):
 
 	return render(request, 'WeatherSTUFF/myaccount.html', context={'fav_places':user.fav_places.split(','), 'pins':pins})
 
+# Edit an existing account
 def change_details(request):
 	if request.method=="POST":
 		edit_form = UserForm(request.POST)
@@ -52,8 +53,8 @@ def change_details(request):
 
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
-
-
+	
+# Create new user account
 def sign_up(request):
 
 	registered = False
@@ -109,6 +110,7 @@ def sign_in(request):
 		return render(request, 'WeatherSTUFF/login.html', context={})
 
 
+# Only allow users who are logged in to access the change details page or the function to log out
 @login_required
 def restricted(request):
 	return render(request, 'WeatherSTUFF/changedetails.html')
@@ -117,6 +119,14 @@ def restricted(request):
 def user_logout(request):
 	logout(request)
 	return redirect(reverse('WeatherSTUFF:index'))
+
+@login_required
+def delete_account(request):
+	user = UserProfile.objects.filter(user=request.user)[0]
+	user.is_active = False
+	user.save()
+	return render(request, 'WeatherSTUFF/index.html', context={"message":"Your account has been deleted"})
+
 
 # Receive a pin post request, save pin to server
 def add_pin(request):

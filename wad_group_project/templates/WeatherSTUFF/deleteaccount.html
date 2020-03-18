@@ -1,0 +1,20 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+{% block title_block %}
+    Delete Account
+{% endblock %}
+
+{% block body_block %}  
+   <div class="userDetails">
+        {{ user.username }}
+   </div>
+
+   <h1 class="pageTitle" id="userAuthenticationTitle">Delete Account</h1>
+
+   <div class="description">
+		Are you sure you want to deactivate your account?
+		<a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="yesDeleteButton">Yes</a>
+		<a href="{% url 'WeatherSTUFF:myaccount' %}" class = 'buttonBox' id="noDeleteButton">No</a>
+	</div>
+
+{% endblock %}
