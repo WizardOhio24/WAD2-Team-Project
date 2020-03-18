@@ -24,6 +24,12 @@ function initialize() {
          var drawnItems = new L.FeatureGroup();
          mymap.addLayer(drawnItems);
          var drawControl = new L.Control.Draw({
+           draw:{
+             polygon: false,
+             circle:false,
+             rectangle: false,
+             polyline: false
+           },
              edit: {
                  featureGroup: drawnItems
              }
