@@ -37,7 +37,7 @@ def change_details(request):
 
 			profile = profile_form.save(commit = False)
 			profile.user = user
-			
+
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']
 			profile.save()
@@ -47,12 +47,12 @@ def change_details(request):
 	else:
 		edit_form = UserForm()
 		profile_form = UserProfileForm()
-		
+
 	return render(request, 'WeatherSTUFF/changedetails.html', context = {'user_form':edit_form, 'profile_form': profile_form})
 
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
-	
+
 
 def sign_up(request):
 
@@ -69,7 +69,7 @@ def sign_up(request):
 
 			profile = profile_form.save(commit = False)
 			profile.user = user
-			
+
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']
 			profile.save()
@@ -82,30 +82,30 @@ def sign_up(request):
 	else:
 		user_form = UserForm()
 		profile_form = UserProfileForm()
-	
+
 	return render(request, 'WeatherSTUFF/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
 
 def sign_in(request):
-	
+
 	if request.method == 'POST':
-		
+
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username = username, password = password)
-		
+
 		if user:
 			if user.is_active:
 				login(request, user)
 				return redirect(reverse('WeatherSTUFF:index'))
-				
-				
+
+
 			else:
 				return HttpResponse("Your account has been disabled.")
 		else:
 			return render(request, 'WeatherSTUFF/login.html', context={"message":"Invalid login details, please try again"})
-			
+
 	else:
-		
+
 		return render(request, 'WeatherSTUFF/login.html', context={})
 
 
@@ -125,7 +125,7 @@ def add_pin(request):
         print("Request user:" + str(request.user))
         try:
             if(request.user.is_authenticated):
-                userProf = UserProfile.objects.filter(user__exact=request.user)
+                userProf = UserProfile.objects.filter(user__exact=request.user).first()
             else:
                 raise UserProfile.DoesNotExist
         except UserProfile.DoesNotExist:
@@ -148,5 +148,3 @@ def get_pins(request):
 
     pin_data = serializers.serialize('json', Pin.objects.all())
     return HttpResponse(pin_data, content_type='application/json')
-
-

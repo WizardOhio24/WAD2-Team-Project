@@ -24,6 +24,12 @@ function initialize() {
          var drawnItems = new L.FeatureGroup();
          mymap.addLayer(drawnItems);
          var drawControl = new L.Control.Draw({
+           draw:{
+             polygon: false,
+             circle:false,
+             rectangle: false,
+             polyline: false
+           },
              edit: {
                  featureGroup: drawnItems
              }
@@ -193,9 +199,10 @@ function savePinToDatabase(layer){
                 'csrfmiddlewaretoken': String(csrftoken),
              },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        layer.remove();
+
         //console.log(XMLHttpRequest);
         if(XMLHttpRequest.status == "401"){
+          layer.remove();
           //console.log(XMLHttpRequest)
           //User profile not authenticated
           alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
