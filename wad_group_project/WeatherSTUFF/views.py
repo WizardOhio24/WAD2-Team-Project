@@ -20,10 +20,15 @@ def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
 def my_account(request):
-	user = UserProfile.objects.filter(user=request.user)[0]
-	pins = Pin.objects.filter(user=user)
-
-	return render(request, 'WeatherSTUFF/myaccount.html', context={'fav_places':user.fav_places.split(','), 'pins':pins})
+	if request.method == 'POST':
+		
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username = username, password = password)
+		pins = Pin.objects.filter(user=user)
+		return render(request, 'WeatherSTUFF/myaccount.html', context={'fav_places':user.fav_places.split(','), 'pins':pins})
+	else:
+		return render(request, 'WeatherSTUFF/myaccount.html')
 
 # Edit an existing account
 def change_details(request):
@@ -122,10 +127,18 @@ def user_logout(request):
 
 @login_required
 def delete_account(request):
-	user = UserProfile.objects.filter(user=request.user)[0]
-	user.is_active = False
-	user.save()
-	return render(request, 'WeatherSTUFF/index.html', context={"message":"Your account has been deleted"})
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username = username, password = password)
+		
+		if user:
+			user.delete()
+			return render(request, 'WeatherSTUFF/index.html', context={"message":"Your account has been deleted"})
+		else:
+			return render(request, 'WeatherSTUFF/index.html', context={"message":"Invaid details, could not delete account"})
+	else:
+		return render(request, 'WeatherSTUFF/myaccount.html', context={})
 
 
 # Receive a pin post request, save pin to server
