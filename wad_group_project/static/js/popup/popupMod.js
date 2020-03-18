@@ -1,4 +1,35 @@
 
+// ---- Note,the update is handled serverside, where it just
+// checks if the latitude and longditude are the same
+function savePinUpdateToDatabase(layer){
+
+  $.ajax({
+      type: 'POST',
+      beforeSend: function(request) {
+      request.setRequestHeader("X-CSRFToken", csrftoken);
+      },
+      url: 'WeatherSTUFF/add_pin/', // this handles the post data //WeatherSTUFF WeatherSTUFF/about/
+      dataType: 'json',
+      data: {
+                'lat':layer['_latlng']['lat'],
+                'lng': layer['_latlng']['lng'],
+                'content': layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
+                'title': 'Not Yet Implimented',
+                'date': '',//Date().toLocaleString(),
+                'csrfmiddlewaretoken': String(csrftoken),
+             },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        if(XMLHttpRequest.status == "401"){
+          layer.remove();
+          //User profile not authenticated
+          alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
+        }
+      },
+      //success: return true,
+  });
+}
+// ----
+
 // Adding nametag labels to all popup-able leaflet layers
 const sourceTypes = ['Layer','Circle','CircleMarker','Marker','Polyline','Polygon','ImageOverlay','VideoOverlay','SVGOverlay','Rectangle','LayerGroup','FeatureGroup','GeoJSON']
 
@@ -191,11 +222,27 @@ L.Popup.include({
          alert('Enter something');
       };
 
+      // --
+
+      var titleField = this._titleField;
+      if (titleField.innerHTML.length > 0){
+         this._title.innerHTML = titleField.innerHTML;
+      } else {
+         alert('Enter something');
+      };
+
+
       L.DomUtil.remove(this._editScreen);
       this._contentNode.style.display = "block";
       this._userActionButtons.style.display = "flex";
 
       this.update();
+
+      // Now save the results to the database
+      //this._source.remove(); <-- To remove the Pin
+      savePinUpdateToDatabase(this._source);
+
+
       L.DomEvent.stop(e);
 
       //  ---------------------End my additions --------------------------------------- //
