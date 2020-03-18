@@ -15,6 +15,10 @@ from django.db import IntegrityError
 
 DUMMY_PASSWORD = "XXX"
 
+# AT THE MOMENT:
+# x_val = latitude
+# y_val = longitude
+
 def populate():
 
     user_A_pins = [
@@ -22,28 +26,52 @@ def populate():
          'content': 'Storm Larry is passing through this area today.',
          'date': generate_date(),
          'rating': 18,
-         'num_ratings':7,
-         'x_val': 55.864,
-         'y_val': -4.251,
+         'num_ratings':23,
+         'x_val': -3.605120,
+         'y_val': 55.070858,
          },
         {'title': 'flooded street, traffic diverted!!',
          'content': 'cars are being diverted via the A83',
          'date': generate_date(),
-         'rating': 0,
-         'num_ratings':0,
-         'x_val': 34.4999,
-         'y_val': -49.0234,
-        }
+         'rating': 3,
+         'num_ratings':4,
+         'x_val': -4.948221,
+         'y_val': 56.217726,
+        },
+        {'title': 'Tornado Warning',
+         'content': 'Winds of upto 130mph in the worst case.',
+         'date': generate_date(),
+         'rating': 43,
+         'num_ratings':37,
+         'x_val': -98.484245,
+         'y_val': 39.011902,
+         },
+        {'title': 'No longer able to access via frozen river',
+         'content': 'Warm weather has caused rapidly melting ice, no longer safe to traverse',
+         'date': generate_date(),
+         'rating': 17,
+         'num_ratings':13,
+         'x_val': 129.675476,
+         'y_val': 62.035454,
+        },
     ]
 
     user_B_pins = [
         {'title': 'I dont know',
          'content': 'how this map works :(',
          'date': generate_date(),
-         'rating': -8,
+         'rating': -20,
          'num_ratings':20,
-         'x_val': 120.4999,
-         'y_val': -23.0234,
+         'x_val': -32.311486,
+         'y_val': 35.690206,
+         },
+         {'title': 'VOLCANIC ERUPTION',
+         'content': 'Large parts of city have been destoryed :(',
+         'date': generate_date(),
+         'rating': -47,
+         'num_ratings':100,
+         'x_val': 14.498059,
+         'y_val': 40.745448,
          },
     ]
 
@@ -53,17 +81,34 @@ def populate():
          'date': generate_date(),
          'rating': 24,
          'num_ratings':30,
-         'x_val': 100.4999,
-         'y_val': 3.0234,
+         'x_val': 150.981930,
+         'y_val': -33.403931,
          },
         {'title': 'Heavy rainfall expected',
          'content': 'reports of high rains, possible flooding',
          'date': generate_date(),
          'rating': 4,
          'num_ratings':12,
-         'x_val': 99.4999,
-         'y_val': 2.0234,
+         'x_val': 18.454794,
+         'y_val': -33.737349,
          },
+        {'title': 'Mudslide',
+         'content': 'Road blocked, traffic diverted',
+         'date': generate_date(),
+         'rating': 20,
+         'num_ratings':13,
+         'x_val': -55.217760,
+         'y_val': -7.969237,
+         },
+        {'title': 'Typhoon warning, flights cancelled',
+         'content': 'reports of high winds, cautionary measures should be taken',
+         'date': generate_date(),
+         'rating': 4,
+         'num_ratings':12,
+         'x_val': 124.924903,
+         'y_val': 1.545619,
+         },
+         
     ]
 
     user_D_pins = [
@@ -72,8 +117,8 @@ def populate():
          'date': generate_date(),
          'rating': -8,
          'num_ratings':20,
-         'x_val': 20.4999,
-         'y_val': -73.0234,
+         'x_val': 13.830021,
+         'y_val': 52.141750,
          },
     ]
 
