@@ -40,8 +40,6 @@ class IndexViewTests(TestCase):
         self.assertContains(response, "fire")
         self.assertContains(response, "flood")
 
-
-
 def generate_date():
     return datetime.datetime(year=random.randint(2010, 2020),
                              month=random.randint(1,12),
