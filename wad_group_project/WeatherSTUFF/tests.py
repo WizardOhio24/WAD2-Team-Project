@@ -27,6 +27,20 @@ class IndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'There are no pins present.')
 
+    def test_pins_display(self):
+        user = generate_user()
+        p1 = generate_pin(user = user, title="rain")
+        p2 = generate_pin(user = user, title="fire")
+        p3 = generate_pin(user = user, title="flood")
+
+        response = self.client.get(reverse('WeatherSTUFF:index'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "rain")
+        self.assertContains(response, "fire")
+        self.assertContains(response, "flood")
+
+
 
 def generate_date():
     return datetime.datetime(year=random.randint(2010, 2020),
@@ -42,7 +56,7 @@ def generate_user(username="test", email="test@test.com", password="xxx"):
     s.save()
     return s
 
-def generate_pin(user, num_ratings=0, rating=0, date=generate_date(), x_val=0, y_val=0):
+def generate_pin(user, num_ratings=0, rating=0, date=generate_date(), x_val=0, y_val=0, title="", content=""):
     pin = Pin(user=user, num_ratings = num_ratings, rating = rating, date=date, x_val=x_val, y_val=y_val)
     pin.save()
     return pin
