@@ -5,16 +5,28 @@
 {% endblock %}
 
 {% block body_block %}  
-   <div class="userDetails">
-        {{ user.username }}
-   </div>
 
-   <h1 class="pageTitle" id="userAuthenticationTitle">Delete Account</h1>
+    {% if message %}
+        <strong class="description" id="accountDeleted">{{ message }}</strong>
+        <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
 
-   <div class="description">
-		Are you sure you want to deactivate your account?
-		<a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="yesDeleteButton">Yes</a>
-		<a href="{% url 'WeatherSTUFF:myaccount' %}" class = 'buttonBox' id="noDeleteButton">No</a>
-	</div>
+    {% else %}
+
+        <div class="userDetails">
+            {{ user.username }}
+        </div>
+
+
+
+        <div class="description" id="deleteDiv">
+            <form method = "post">
+                {% csrf_token %}
+		        Press here to permanently delete your account
+		        <button class = 'buttonBox' id="deleteButton">Delete</a>
+        </div>
+        
+   
+        
+    {% endif %}
 
 {% endblock %}

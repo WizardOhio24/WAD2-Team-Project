@@ -10,7 +10,7 @@ import datetime
 from WeatherSTUFF.models import Pin, UserProfile
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -20,13 +20,10 @@ def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
 def my_account(request):
-	if request.method == 'POST':
-		
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user = authenticate(username = username, password = password)
-		pins = Pin.objects.filter(user=user)
-		return render(request, 'WeatherSTUFF/myaccount.html', context={'fav_places':user.fav_places.split(','), 'pins':pins})
+	if request.user.is_authenticated:
+		userProf = UserProfile.objects.filter(user__exact=request.user).first()
+		pins = Pin.objects.filter(user=userProf)		
+		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins})
 	else:
 		return render(request, 'WeatherSTUFF/myaccount.html')
 
@@ -102,9 +99,7 @@ def sign_in(request):
 		if user:
 			if user.is_active:
 				login(request, user)
-				return redirect(reverse('WeatherSTUFF:index'))
-
-
+				return redirect(reverse('WeatherSTUFF:myaccount'))
 			else:
 				return HttpResponse("Your account has been disabled.")
 		else:
@@ -115,11 +110,6 @@ def sign_in(request):
 		return render(request, 'WeatherSTUFF/login.html', context={})
 
 
-# Only allow users who are logged in to access the change details page or the function to log out
-@login_required
-def restricted(request):
-	return render(request, 'WeatherSTUFF/changedetails.html')
-
 @login_required
 def user_logout(request):
 	logout(request)
@@ -127,18 +117,21 @@ def user_logout(request):
 
 @login_required
 def delete_account(request):
+	
 	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user = authenticate(username = username, password = password)
 		
-		if user:
-			user.delete()
-			return render(request, 'WeatherSTUFF/index.html', context={"message":"Your account has been deleted"})
+		if request.user.is_authenticated:
+			form = DeleteProfileForm(request.POST)
+			userProf = UserProfile.objects.filter(user__exact=request.user).first()
+			userProf.delete()
+			request.user.delete()
+			
+			return render(request, 'WeatherSTUFF/deleteaccount.html', context={"message":"Your account has been deleted", "form":form})
 		else:
-			return render(request, 'WeatherSTUFF/index.html', context={"message":"Invaid details, could not delete account"})
+			return render(request, 'WeatherSTUFF/deleteaccount.html', context={"message":"Invaid details, could not delete account"})
 	else:
-		return render(request, 'WeatherSTUFF/myaccount.html', context={})
+		
+		return render(request, 'WeatherSTUFF/deleteaccount.html')
 
 
 # Receive a pin post request, save pin to server

@@ -15,3 +15,10 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('profile_picture',)
 
+class DeleteProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ()
+
+
+

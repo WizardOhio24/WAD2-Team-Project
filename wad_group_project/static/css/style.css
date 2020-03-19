@@ -4,6 +4,19 @@
     width: 80%;
 }
 
+#deleteDiv{
+    position:relative;
+    top:200px;
+    left:400px;
+}
+
+#deleteButton{
+    position:relative;
+    top:60px;
+    right:270px;
+    width:30%
+}
+
 body{
     background-color: #4C566A;
     height:100%;
@@ -157,6 +170,13 @@ body{
     position:relative;
     left:460px;
     top:100px;
+}
+
+#accountDeleted{
+    text-align: center;
+    position:relative;
+    left:430px;
+    top:100px;   
 }
 
 #changeButton{
