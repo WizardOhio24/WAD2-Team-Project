@@ -2,7 +2,7 @@
 // ---- Note,the update is handled serverside, where it just
 // checks if the latitude and longditude are the same
 function savePinUpdateToDatabase(layer){
-
+  console.log(layer['_popup']['options']['title'])
   $.ajax({
       type: 'POST',
       beforeSend: function(request) {
@@ -14,7 +14,7 @@ function savePinUpdateToDatabase(layer){
                 'lat':layer['_latlng']['lat'],
                 'lng': layer['_latlng']['lng'],
                 'content': layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
-                'title': 'Not Yet Implimented',
+                'title': layer['_popup']['_titleField']['innerText'],
                 'date': '',//Date().toLocaleString(),
                 'csrfmiddlewaretoken': String(csrftoken),
              },
@@ -227,9 +227,12 @@ L.Popup.include({
       var titleField = this._titleField;
       if (titleField.innerHTML.length > 0){
          this._title.innerHTML = titleField.innerHTML;
+         this._popup
       } else {
          alert('Enter something');
       };
+
+
 
 
       L.DomUtil.remove(this._editScreen);
@@ -240,11 +243,12 @@ L.Popup.include({
 
       // Now save the results to the database
       //this._source.remove(); <-- To remove the Pin
-      savePinUpdateToDatabase(this._source);
-
 
       L.DomEvent.stop(e);
 
+      console.log(this._source)
+
+      savePinUpdateToDatabase(this._source);
       //  ---------------------End my additions --------------------------------------- //
 
 

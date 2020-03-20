@@ -149,15 +149,27 @@ def add_pin(request):
 
         # If there is a pin in the same location and it is owned by the same user,
         # then update the pin currently at that location rather than creating a new one
-        p = Pin(  \
-        user = userProf, \
-        date = datenow, \
-        x_val = request.POST['lng'], \
-        y_val = request.POST['lat'], \
-        title = request.POST['title'], \
-        content = request.POST['content'], \
-        )
-        p.save()
+
+        obj, created = Pin.objects.update_or_create(x_val = request.POST['lng'], y_val = request.POST['lat'], defaults={
+        "user":userProf,
+        "date":datenow,
+        "x_val":request.POST['lng'],
+        "y_val":request.POST['lat'],
+        "title":request.POST['title'],
+        "content":request.POST['content']
+        })
+
+        print(created)
+        print(obj)
+        #p = Pin(  \
+        #user = userProf, \
+        #date = datenow, \
+        #x_val = request.POST['lng'], \
+        #y_val = request.POST['lat'], \
+        #title = request.POST['title'], \
+        #content = request.POST['content'], \
+        #)
+        #p.save()
         return HttpResponse(status=201)
 
 def get_pins(request):
