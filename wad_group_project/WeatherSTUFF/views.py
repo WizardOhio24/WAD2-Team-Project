@@ -22,7 +22,7 @@ def index(request):
 def my_account(request):
 	if request.user.is_authenticated:
 		userProf = UserProfile.objects.filter(user__exact=request.user).first()
-		pins = Pin.objects.filter(user=userProf)		
+		pins = Pin.objects.filter(user=userProf)
 		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins})
 	else:
 		return render(request, 'WeatherSTUFF/myaccount.html')
@@ -55,7 +55,7 @@ def change_details(request):
 
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
-	
+
 # Create new user account
 def sign_up(request):
 
@@ -117,20 +117,20 @@ def user_logout(request):
 
 @login_required
 def delete_account(request):
-	
+
 	if request.method == 'POST':
-		
+
 		if request.user.is_authenticated:
 			form = DeleteProfileForm(request.POST)
 			userProf = UserProfile.objects.filter(user__exact=request.user).first()
 			userProf.delete()
 			request.user.delete()
-			
+
 			return render(request, 'WeatherSTUFF/deleteaccount.html', context={"message":"Your account has been deleted", "form":form})
 		else:
 			return render(request, 'WeatherSTUFF/deleteaccount.html', context={"message":"Invaid details, could not delete account"})
 	else:
-		
+
 		return render(request, 'WeatherSTUFF/deleteaccount.html')
 
 
@@ -146,12 +146,14 @@ def add_pin(request):
                 raise UserProfile.DoesNotExist
         except UserProfile.DoesNotExist:
             return HttpResponse(status=401, content="No User found, you are not logged in.")
-            #raise Http404("No User found, you are not logged in.")
+
+        # If there is a pin in the same location and it is owned by the same user,
+        # then update the pin currently at that location rather than creating a new one
         p = Pin(  \
         user = userProf, \
         date = datenow, \
-        x_val = request.POST['lat'], \
-        y_val = request.POST['lng'], \
+        x_val = request.POST['lng'], \
+        y_val = request.POST['lat'], \
         title = request.POST['title'], \
         content = request.POST['content'], \
         )
