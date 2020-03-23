@@ -27,10 +27,16 @@
         <div id="pins">
             Pins
             <div class="listDiv" id="listPins">
+                <ul>
                 {% for pin in pins %}
-                    {{ pin.title }}
-                    {{ pin.content }}
+                    
+                    <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}" class="listItem">{{ pin.title }}</a></li>
+                    <li>{{ pin.content }} </li>
+                    <br />
+                    
                 {% endfor %}
+
+                </ul>
             </div>
         </div>
 

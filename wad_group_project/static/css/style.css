@@ -235,7 +235,9 @@ body{
     text-align:left;
     width:80%;
     height:55%;
-    margin-top: 20px;
+    margin-top:20px;
+    position:relative;
+    bottom:10px;
 }
 
 #addButton{
@@ -289,5 +291,17 @@ body{
     padding: 20px 40px;
     font-size:20px;
     
+}
+
+ul{
+    list-style-type: none;
+}
+
+ul .listItem{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:white;
+    font-size:20px;
+    text-decoration: none;
+
 }
 

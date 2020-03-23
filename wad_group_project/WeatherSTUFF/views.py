@@ -19,10 +19,27 @@ from django.contrib.auth.decorators import login_required
 def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
+def show_pin(request, pin_name_slug):
+	context_dict={}
+	try:
+		pin = Pin.objects.get(slug=pin_name_slug)
+
+		context_dict['pin'] = pin
+
+	except Pin.DoesNotExist:
+
+		context_dict['pin'] = None
+	
+
+	return render(request, 'rango/pin.html', context=context_dict)
+
+
 def my_account(request):
 	if request.user.is_authenticated:
 		userProf = UserProfile.objects.filter(user__exact=request.user).first()
 		pins = Pin.objects.filter(user=userProf)
+	
+		
 		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins})
 	else:
 		return render(request, 'WeatherSTUFF/myaccount.html')
@@ -108,7 +125,6 @@ def sign_in(request):
 	else:
 
 		return render(request, 'WeatherSTUFF/login.html', context={})
-
 
 @login_required
 def user_logout(request):
