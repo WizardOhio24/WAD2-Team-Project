@@ -10,7 +10,7 @@ import datetime
 from WeatherSTUFF.models import Pin, UserProfile
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -21,17 +21,25 @@ def index(request):
 
 def show_pin(request, pin_name_slug):
 	context_dict={}
-	try:
-		pin = Pin.objects.get(slug=pin_name_slug)
+	if request.method=='POST':
 
-		context_dict['pin'] = pin
+		if request.user.is_authenticated:
+			form = DeletePinForm(request.POST)
+			context_dict['form'] = form
+			try:
+				pin = Pin.objects.get(slug=pin_name_slug)
 
-	except Pin.DoesNotExist:
+				context_dict['pin'] = pin
 
-		context_dict['pin'] = None
+				pin.delete()
+
+			except Pin.DoesNotExist:
+
+				context_dict['pin'] = None
+		context_dict['message'] = "You pin has been succesfully deleted"
 	
 
-	return render(request, 'rango/pin.html', context=context_dict)
+	return render(request, 'WeatherSTUFF/pin.html', context=context_dict)
 
 
 def my_account(request):
@@ -46,29 +54,17 @@ def my_account(request):
 
 # Edit an existing account
 def change_details(request):
-	if request.method=="POST":
-		edit_form = UserForm(request.POST)
-		profile_form = UserProfileForm(request.POST)
-
-		if edit_form.is_valid() and profile_form.is_valid():
-			user = edit_form.save()
-			user.set_password(user.password)
-			user.save()
-
-			profile = profile_form.save(commit = False)
-			profile.user = user
-
-			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
-			profile.save()
-
-		else:
-				print(edit_form.errors, profile_form.errors)
+	if request.method=='POST':
+		user_form = EditUserForm(request.POST, instance=request.user)
+		user_form.actual_user = request.user
+		if user_form.is_valid():
+			user_form.save()
+			
+			return redirect(reverse('WeatherSTUFF:myaccount'))
 	else:
-		edit_form = UserForm()
-		profile_form = UserProfileForm()
-
-	return render(request, 'WeatherSTUFF/changedetails.html', context = {'user_form':edit_form, 'profile_form': profile_form})
+		user_form = EditUserForm(request.POST, instance=request.user)
+	context_dict = {'user_form':user_form}
+	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
 
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
@@ -129,7 +125,10 @@ def sign_in(request):
 @login_required
 def user_logout(request):
 	logout(request)
-	return redirect(reverse('WeatherSTUFF:index'))
+	return redirect(reverse('WeatherSTUFF:logged_out'))
+
+def logged_out(request):
+	return render(request, 'WeatherSTUFF/logout.html')
 
 @login_required
 def delete_account(request):

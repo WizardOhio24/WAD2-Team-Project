@@ -12,8 +12,7 @@
    <h1 class="pageTitle" id="userAuthenticationTitle">Change details</h1>
 
 
-   <form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:changedetails' %}"
-    enctype = "multipart/form-data">
+   <form id = "user_form" method = "post">
 
     {% csrf_token %}
     <!-- Display each form -->
@@ -21,8 +20,8 @@
     {{ profile_form.as_p }}
 
     <!-- Provide a button to click the submit the form. -->
-    <input type="submit" name="submit" value="Update" class="buttonBox" id="updateButton"/>
-</form>
+    <button type="submit" class="buttonBox" id="updateButton">Update</button>
+    </form>
 {% endblock %}
 
 

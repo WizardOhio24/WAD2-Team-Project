@@ -31,7 +31,7 @@
                 {% for pin in pins %}
                     
                     <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}" class="listItem">{{ pin.title }}</a></li>
-                    <li>{{ pin.content }} </li>
+                    <li>{{ pin.content }}</li>
                     <br />
                     
                 {% endfor %}
@@ -42,7 +42,7 @@
 
     {% else %}
     <div class="description">
-        Have an accont? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
+        Have an account? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>
         Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Register</a>
      

@@ -8,4 +8,19 @@
 
 {% block body_block %}
 
+    {% if message %}
+        <strong class="description" id="accountDeleted">{{ message }}</strong>
+        <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
+
+    {% else %}
+
+    <div class="description" id="deleteDiv">
+        <form method = "post">
+            {% csrf_token %}
+            Press here to permanently delete your pin
+            <button class = 'buttonBox' id="deleteButton">Delete</a>
+    </div>
+    {% endif %}
+
+
 {% endblock %}
