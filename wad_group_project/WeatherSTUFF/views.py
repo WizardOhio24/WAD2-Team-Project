@@ -10,33 +10,40 @@ import datetime
 from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm, AddFavouritePlaceForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm, FavPlaceForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-
+import math
 
 def show_fav_place(request, fav_place_slug):
 	
 	fav_place = FavouritePlace.objects.filter(slug=fav_place_slug).first()
-	if fav_place:
-		place_name = fav_place.place_name
-	else:
-		place_name = None
+	form = FavPlaceForm()
+
+	all_pins = Pin.objects.all()
+	pins = []
+	for pin in all_pins:
+		diff_x = fav_place.x_val-pin.x_val
+		diff_y = fav_place.x_val-pin.x_val
+		distance = math.sqrt((diff_x**2)+(diff_y**2))
+		if distance<50:
+			pins.append(pin)
 	
-	return render(request, 'WeatherSTUFF/favPlace.html', context={'fav_place':place_name})
-
-
+	if request.method=="POST":
+		form = FavPlaceForm(request.POST)
+		fav_place.delete()
+		return redirect(reverse('WeatherSTUFF:myaccount'))
+	return render(request, 'WeatherSTUFF/favPlace.html', context={'form':form, 'fav_place':fav_place, 'pins':pins})
 
 def add_fav(request):
 	
 	userProf = UserProfile.objects.filter(user__exact=request.user).first()
 
-	form = AddFavouritePlaceForm()
+	form = FavPlaceForm()
 
 	if request.method=="POST":
-		form = AddFavouritePlaceForm(request.POST)
+		form = FavPlaceForm(request.POST)
 		if form.is_valid():
 			fav_place = form.save(commit=False)
 			fav_place.user = userProf

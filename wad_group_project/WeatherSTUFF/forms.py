@@ -32,10 +32,11 @@ class EditUserForm(forms.ModelForm):
         model=User
         fields = ('username', 'password',)
 
-class AddFavouritePlaceForm(forms.ModelForm):
+class FavPlaceForm(forms.ModelForm):
     class Meta:
         model=FavouritePlace
         fields = ('place_name', 'x_val', 'y_val',)
+
 
 
 
