@@ -15,12 +15,15 @@
 
 
         <div id="favouritePlaces">
-            Favourite Places <a href="" id="addButton">+</a>
+            Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
 
             <div class="listDiv">
-               {% for fav_place in fav_places %}
-                   {{ fav_place }}
-               {% endfor %}
+                <ul>
+                    {% for fav_place in fav_places %}
+                    <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}" class="listItem">{{ fav_place.place_name }}</a></li>
+                    {% endfor %}
+                </ul>
+       
             </div>
         </div>
 

@@ -7,7 +7,6 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    fav_places = models.TextField(blank = True)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
     
     class Meta:
@@ -15,6 +14,22 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class FavouritePlace(models.Model):
+    place_name = models.CharField(max_length=200)
+    x_val = models.FloatField()
+    y_val = models.FloatField()
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.place_name)
+        super(FavouritePlace, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.place_name
+
 
 
 class Pin(models.Model):

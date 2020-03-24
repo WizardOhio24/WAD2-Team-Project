@@ -7,13 +7,44 @@ from django.urls import reverse
 
 import datetime
 
-from WeatherSTUFF.models import Pin, UserProfile
+from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm, AddFavouritePlaceForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
+
+
+def show_fav_place(request, fav_place_slug):
+	
+	fav_place = FavouritePlace.objects.filter(slug=fav_place_slug).first()
+	if fav_place:
+		place_name = fav_place.place_name
+	else:
+		place_name = None
+	
+	return render(request, 'WeatherSTUFF/favPlace.html', context={'fav_place':place_name})
+
+
+
+def add_fav(request):
+	
+	userProf = UserProfile.objects.filter(user__exact=request.user).first()
+
+	form = AddFavouritePlaceForm()
+
+	if request.method=="POST":
+		form = AddFavouritePlaceForm(request.POST)
+		if form.is_valid():
+			fav_place = form.save(commit=False)
+			fav_place.user = userProf
+			fav_place.save()
+			return redirect(reverse('WeatherSTUFF:myaccount'))
+
+	return render(request, 'WeatherSTUFF/addfav.html', context={'form':form})
+	
 
 
 def index(request):
@@ -46,9 +77,9 @@ def my_account(request):
 	if request.user.is_authenticated:
 		userProf = UserProfile.objects.filter(user__exact=request.user).first()
 		pins = Pin.objects.filter(user=userProf)
-	
-		
-		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins})
+		fav_places = FavouritePlace.objects.filter(user=userProf)
+
+		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins, 'fav_places':fav_places})
 	else:
 		return render(request, 'WeatherSTUFF/myaccount.html')
 

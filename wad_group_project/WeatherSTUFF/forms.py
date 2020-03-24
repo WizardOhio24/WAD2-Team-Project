@@ -1,6 +1,6 @@
 
 from django import forms
-from WeatherSTUFF.models import UserProfile, Pin
+from WeatherSTUFF.models import UserProfile, Pin, FavouritePlace
 from django.contrib.auth.models import User
 
 class UserForm(forms.ModelForm):
@@ -31,6 +31,11 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model=User
         fields = ('username', 'password',)
+
+class AddFavouritePlaceForm(forms.ModelForm):
+    class Meta:
+        model=FavouritePlace
+        fields = ('place_name', 'x_val', 'y_val',)
 
 
 
