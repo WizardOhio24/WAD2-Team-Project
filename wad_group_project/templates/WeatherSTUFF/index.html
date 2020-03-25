@@ -46,8 +46,10 @@ crossorigin=""/>
 
 	{% if user.is_authenticated %}
 	{% else %}
+	<div class="authenticationDiv">
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
+	</div>
 	{% endif %}
 	{% csrf_token%}
 	<div id="mapContainer">

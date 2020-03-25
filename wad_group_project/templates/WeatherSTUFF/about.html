@@ -9,8 +9,10 @@
 	<h1 class="pageTitle">About</h1>
 	{% if user.is_authenticated %}
 	{% else %}
+	<div class="authenticationDiv">
 	<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
 	<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
+	</div>
 	{% endif %}
 	<div class="description">
 		We are a group of university students who are interested in the impact
