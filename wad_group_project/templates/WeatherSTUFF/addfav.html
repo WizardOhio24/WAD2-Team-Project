@@ -7,12 +7,16 @@
 {% block body_block %}
 
     {% if user.is_authenticated %} 
+
         <h1 class="pageTitle" id="userAuthenticationTitle">{{ user.username }}</h1>
+
+        <!-- display link to get the coordinates of your favourite place -->
         <div class="description" id="addFav">
             Click here to get the coordinates of your favourite location
             <a href='https://www.latlong.net' class="buttonBox" id="linkButton">Get Coordinates</a>
         </div>
 
+        <!-- display the form to add the details of your favourite place -->
         <div class="description" id="favPlaceDiv">
             <form method = "post">
                 {% csrf_token %}

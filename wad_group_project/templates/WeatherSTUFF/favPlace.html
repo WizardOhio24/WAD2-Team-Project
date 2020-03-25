@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block body_block %}
+
 <h1 class="pageTitle">{{ fav_place.place_name }}</h1>
+
+<!-- display the form to delete your favourite place -->
 <div class="description" id="deleteFavPlace">
     <form method = "post">
         {% csrf_token %}
@@ -13,7 +16,7 @@
         <button class = 'buttonBox' id="deletePlaceButton">Delete</a>
 </div>
 
-
+<!-- display the list of pins which are close to your favourite location -->
 <div class="containerClass" id="closePins">
     <strong>Events near here</strong>
     <div id="listDiv">
@@ -29,8 +32,5 @@
         </ul>
     </div>
 </div>
-
-
-
 
 {% endblock %}

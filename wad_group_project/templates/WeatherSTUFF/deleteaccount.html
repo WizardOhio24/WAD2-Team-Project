@@ -7,16 +7,16 @@
 {% block body_block %}  
 
     {% if message %}
+        <!-- if the message was passed in from the view, then the user has just deleted account -->
         <strong class="description" id="message">{{ message }}</strong>
         <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
 
     {% else %}
 
+        <!-- if not, display the form allowing the user to delete their account-->
         <div class="userDetails">
             {{ user.username }}
         </div>
-
-
 
         <div class="description" id="deleteDiv">
             <form method = "post">
@@ -24,8 +24,6 @@
 		        Press here to permanently delete your account
 		        <button class = 'buttonBox' id="deleteButton">Delete</a>
         </div>
-        
-   
         
     {% endif %}
 
