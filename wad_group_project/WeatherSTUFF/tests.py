@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from WeatherSTUFF.models import UserProfile, Pin
+from WeatherSTUFF.models import UserProfile, Pin, FavouritePlace
 from django.contrib.auth.models import User
 import datetime
 from django.utils import timezone
@@ -39,6 +39,31 @@ class IndexViewTests(TestCase):
         self.assertContains(response, "rain")
         self.assertContains(response, "fire")
         self.assertContains(response, "flood")
+
+class MyAccountViewTests(TestCase):
+    def setUp(self):
+        user = generate_user()
+        self.client.force_login(User.objects.get_or_create(username='test')[0])
+
+    def test_favourite_place_displays(self):
+        """
+        If user has a favourite place, should display on page
+        """
+
+        user = User.objects.get_or_create(username='test')[0]
+        userprofile = UserProfile.objects.get_or_create(user=user)[0]
+        place_name = "Glasgow"
+        x_val = 0
+        y_val = 0
+        place = FavouritePlace(place_name=place_name, x_val=x_val, y_val=y_val, user=userprofile)
+        place.save()
+
+        response = self.client.get(reverse('WeatherSTUFF:myaccount'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Glasgow")
+        
+
 
 def generate_date():
     return datetime.datetime(year=random.randint(2010, 2020),
