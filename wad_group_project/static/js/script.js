@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", initialize);
 //document.onload = initialize();
 
 function initialize() {
+    console.log("Adding Pins");
     var mymap = L.map('mapContainer').setView([40, -97], 4);
 
     var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -182,7 +183,7 @@ var csrftoken;
 function savePinToDatabase(layer){
 
 //console.log(layer)
-
+console.log(layer['_popup'])
   $.ajax({
       type: 'POST',
       beforeSend: function(request) {
@@ -191,12 +192,12 @@ function savePinToDatabase(layer){
       url: 'WeatherSTUFF/add_pin/', // this handles the post data //WeatherSTUFF WeatherSTUFF/about/
       dataType: 'json',
       data: {
-                'lat':layer['_latlng']['lat'],
-                'lng': layer['_latlng']['lng'],
-                'content': layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
-                'title': 'Not Yet Implimented',
-                'date': '',//Date().toLocaleString(),
-                'csrfmiddlewaretoken': String(csrftoken),
+                "lat":layer['_latlng']['lat'],
+                "lng": layer['_latlng']['lng'],
+                "content": layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
+                "title": layer['_popup']['options']['title'],
+                "date": '',//Date().toLocaleString(),
+                "csrfmiddlewaretoken": String(csrftoken)
              },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -207,7 +208,7 @@ function savePinToDatabase(layer){
           //User profile not authenticated
           alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
         }
-        //console.log("Status: " + XMLHttpRequest.status); console.log("Error: " + errorThrown);
+        console.log(XMLHttpRequest); console.log("Error: " + errorThrown);
       },
       //success: return true,
   });
@@ -225,7 +226,7 @@ function addPinsToMap(map){
     for(m in data){
       var mf = data[m]["fields"];
 
-      var myMarker =  L.marker( [mf["x_val"], mf["y_val"]] );
+      var myMarker =  L.marker( [mf["y_val"], mf["x_val"]] );
       console.log(mf['title']);
       myMarker.bindPopup( mf["content"] , {editable: true, title:mf['title']} )//.addTo(map)
       prevPins.addLayer(myMarker);

@@ -10,31 +10,42 @@
     
     {% if user.is_authenticated %} 
         <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
-        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change details</a>   
+        <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="deleteAccountButton">Delete Account</a>
+        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change Details</a>
+
 
         <div id="favouritePlaces">
-            Favourite Places <a href="" id="addButton">+</a>
+            Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
 
             <div class="listDiv">
-               {% for fav_place in fav_places %}
-                   {{ fav_place }}
-               {% endfor %}
+                <ul>
+                    {% for fav_place in fav_places %}
+                    <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}" class="listItem">{{ fav_place.place_name }}</a></li>
+                    {% endfor %}
+                </ul>
+       
             </div>
         </div>
 
         <div id="pins">
             Pins
             <div class="listDiv" id="listPins">
+                <ul>
                 {% for pin in pins %}
-                    {{ pin.title }}
-                    {{ pin.content }}
+                    
+                    <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}" class="listItem">{{ pin.title }}</a></li>
+                    <li>{{ pin.content }}</li>
+                    <br />
+                    
                 {% endfor %}
+
+                </ul>
             </div>
         </div>
 
     {% else %}
     <div class="description">
-        Have an accont? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
+        Have an account? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>
         Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Register</a>
      

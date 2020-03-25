@@ -1,0 +1,28 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+{% block title_block %}
+    Add favourite location
+{% endblock %}
+
+{% block body_block %}
+
+    {% if user.is_authenticated %} 
+        <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
+        <div class="description" id="addFav">
+            Click here to get the coordinates of your favourite location
+            <a href='https://www.latlong.net' class="buttonBox" id="linkButton">Get Coordinates</a>
+        </div>
+
+        <div class="description" id="favPlaceDiv">
+            <form method = "post">
+                {% csrf_token %}
+		        {{ form.as_p }}
+		        <button class = 'buttonBox' id="addFavButton">Add</a>
+        </div>
+        
+   
+        
+    {% endif %}
+
+{% endblock %}
+

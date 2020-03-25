@@ -1,0 +1,35 @@
+{% extends 'WeatherSTUFF/base.html' %}
+
+{% block title_block %}
+    {{ fav_place.place_name }}
+{% endblock %}
+
+{% block body_block %}
+<h1 class="pageTitle">{{ fav_place.place_name }}</h1>
+<div class="description" id="deleteFavPlace">
+    <form method = "post">
+        {% csrf_token %}
+        Press here to delete your favourite place
+        <button class = 'buttonBox' id="deletePlaceButton">Delete</a>
+</div>
+
+<div id='closePins'>
+    <strong>Events near here</strong>
+    <div id="listClosePins">
+        <ul>
+        {% for pin in pins %}
+            
+            <li>{{ pin.title }}</li>
+            <li>{{ pin.content }}</li>
+            <br />
+            
+        {% endfor %}
+
+        </ul>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
