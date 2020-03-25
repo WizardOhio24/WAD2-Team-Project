@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.template.defaultfilters import slugify
 
-# Create your models here.
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
@@ -11,7 +11,6 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         super(UserProfile, self).save(*args, **kwargs)
 
-    
     class Meta:
         verbose_name_plural = 'UserProfiles'
 
@@ -29,11 +28,8 @@ class FavouritePlace(models.Model):
         self.slug = slugify(self.place_name)
         super(FavouritePlace, self).save(*args, **kwargs)
 
-
     def __str__(self):
         return self.place_name
-
-
 
 class Pin(models.Model):
     TITLE_MAX_LENGTH = 128
@@ -58,7 +54,6 @@ class Pin(models.Model):
 
         self.slug = slugify(self.title)
         super(Pin, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return self.title

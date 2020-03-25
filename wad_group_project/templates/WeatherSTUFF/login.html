@@ -8,8 +8,12 @@
 {% block body_block %}
 
 <h1 class="pageTitle" id="userAuthenticationTitle">Sign In</h1>
+
+<!-- display the login form -->
 <form id="login_form" method="post" action="{% url 'WeatherSTUFF:login' %}">
     {% csrf_token %}
+
+    <!-- if a message is passed in, it should be displayed, explaining the wrong details were entered at first -->
     {% if message %}
     {{ message }}
     {% endif %}<br />  

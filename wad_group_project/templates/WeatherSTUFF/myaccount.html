@@ -9,17 +9,19 @@
 
     
     {% if user.is_authenticated %} 
+
         <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
+
+        <!-- give the logged in user the option to either edit or delete their account-->
         <div class="authenticationDiv">
             <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="accountButton">Delete Account</a>
             <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="accountButton">Change Account</a>
         </div>
         
-
-
+        <!-- show the user's favourite places
+             each favourite place is a link to provide more details about it -->
         <div class="containerClass" id="favouritePlaces">
             My Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
-
             <div class="listDiv">
                 <ul>
                     {% for fav_place in fav_places %}
@@ -31,6 +33,8 @@
             </div>
         </div>
 
+        <!-- display the list of pins which the user has placed 
+             each list item is a link to provide more details about the pin or possibly delete it -->
         <div class="containerClass" id="pins">
             My Pins
             <div class="listDiv">
@@ -48,10 +52,12 @@
         </div>
 
     {% else %}
+
+    <!-- if the user isn't logged in, give them the option to sign in or create an account -->
     <div class="description">
         Have an account? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
    </br>
-        Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Register</a>
+        Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Sign Up</a>
      
     </div>
     {% endif %} <br />

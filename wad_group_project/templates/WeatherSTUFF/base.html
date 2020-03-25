@@ -10,7 +10,6 @@
                {% block title_block %}
 
                {% endblock %}
-
         </title>
 
         <!-- Use ajax to send data from javascript to django database (POST/GET requests for pins) -->
@@ -22,6 +21,9 @@
         {% endblock %}
     </head>
     <body>
+        <!-- nav bar will have option to log out if signed in
+        if not signed in, you will have the option to sign in-->
+
         <div class="navBar">
             {% if user.is_authenticated %}
          
@@ -39,10 +41,7 @@
             
             {% endif %}
     
-            
-    
             </div>
-
 
         <div>
             {% block body_block %}

@@ -16,96 +16,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import math
 
-def show_fav_place(request, fav_place_slug):
-	
-	fav_place = FavouritePlace.objects.filter(slug=fav_place_slug).first()
-	form = FavPlaceForm()
 
-	all_pins = Pin.objects.all()
-	pins = []
-	for pin in all_pins:
-		diff_x = fav_place.x_val-pin.x_val
-		diff_y = fav_place.x_val-pin.x_val
-		distance = math.sqrt((diff_x**2)+(diff_y**2))
-		if distance<50:
-			pins.append(pin)
-	
-	if request.method=="POST":
-		form = FavPlaceForm(request.POST)
-		fav_place.delete()
-		return redirect(reverse('WeatherSTUFF:myaccount'))
-	return render(request, 'WeatherSTUFF/favPlace.html', context={'form':form, 'fav_place':fav_place, 'pins':pins})
-
-def add_fav(request):
-	
-	userProf = UserProfile.objects.filter(user__exact=request.user).first()
-
-	form = FavPlaceForm()
-
-	if request.method=="POST":
-		form = FavPlaceForm(request.POST)
-		if form.is_valid():
-			fav_place = form.save(commit=False)
-			fav_place.user = userProf
-			fav_place.save()
-			return redirect(reverse('WeatherSTUFF:myaccount'))
-
-	return render(request, 'WeatherSTUFF/addfav.html', context={'form':form})
-	
-
-
+#home page
 def index(request):
 	return render(request, 'WeatherSTUFF/index.html')
 
-def show_pin(request, pin_name_slug):
-	context_dict={}
-	if request.method=='POST':
 
-		if request.user.is_authenticated:
-			form = DeletePinForm(request.POST)
-			context_dict['form'] = form
-			try:
-				pin = Pin.objects.get(slug=pin_name_slug)
-
-				context_dict['pin'] = pin
-
-				pin.delete()
-
-			except Pin.DoesNotExist:
-
-				context_dict['pin'] = None
-		context_dict['message'] = "You pin has been succesfully deleted"
-	
-
-	return render(request, 'WeatherSTUFF/pin.html', context=context_dict)
-
-
-def my_account(request):
-	if request.user.is_authenticated:
-		userProf = UserProfile.objects.filter(user__exact=request.user).first()
-		pins = Pin.objects.filter(user=userProf)
-		fav_places = FavouritePlace.objects.filter(user=userProf)
-
-		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins, 'fav_places':fav_places})
-	else:
-		return render(request, 'WeatherSTUFF/myaccount.html')
-
-# Edit an existing account
-def change_details(request):
-	if request.method=='POST':
-		user_form = EditUserForm(request.POST, instance=request.user)
-		user_form.actual_user = request.user
-		if user_form.is_valid():
-			user_form.save()
-			
-			return redirect(reverse('WeatherSTUFF:myaccount'))
-	else:
-		user_form = EditUserForm(request.POST, instance=request.user)
-	context_dict = {'user_form':user_form}
-	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
-
+#about page
 def about(request):
 	return render(request, 'WeatherSTUFF/about.html')
+
 
 # Create new user account
 def sign_up(request):
@@ -113,9 +33,11 @@ def sign_up(request):
 	registered = False
 
 	if request.method == 'POST':
+		#get the forms
 		user_form = UserForm(request.POST)
 		profile_form = UserProfileForm(request.POST)
 
+		#get the data input into the forms and save the details in a new object in the models
 		if user_form.is_valid() and profile_form.is_valid():
 			user = user_form.save()
 			user.set_password(user.password)
@@ -139,14 +61,16 @@ def sign_up(request):
 
 	return render(request, 'WeatherSTUFF/register.html', context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered})
 
+#login page
 def sign_in(request):
 
 	if request.method == 'POST':
-
+		#get the details entered into the form and authenticate them
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(username = username, password = password)
 
+		#if the details are correct, log the user in
 		if user:
 			if user.is_active:
 				login(request, user)
@@ -160,22 +84,48 @@ def sign_in(request):
 
 		return render(request, 'WeatherSTUFF/login.html', context={})
 
-@login_required
-def user_logout(request):
-	logout(request)
-	return redirect(reverse('WeatherSTUFF:logged_out'))
+#my account page
+def my_account(request):
+	#only give access if the user is authenticated
+	if request.user.is_authenticated:
+		#get the user profile, any pins that the user has placed and any favourite places that they have
+		userProf = UserProfile.objects.filter(user__exact=request.user).first()
+		pins = Pin.objects.filter(user=userProf)
+		fav_places = FavouritePlace.objects.filter(user=userProf)
 
-def logged_out(request):
-	return render(request, 'WeatherSTUFF/logout.html')
+		#pass all the necessary details through the context dictionary
+		return render(request, 'WeatherSTUFF/myaccount.html', context={'userProf':userProf, 'pins':pins, 'fav_places':fav_places})
+	else:
+		return render(request, 'WeatherSTUFF/myaccount.html')
 
+
+# Edit an existing account
+def change_details(request):
+	if request.method=='POST':
+		user_form = EditUserForm(request.POST, instance=request.user)
+		user_form.actual_user = request.user
+		if user_form.is_valid():
+			user_form.save()
+			
+			return redirect(reverse('WeatherSTUFF:myaccount'))
+	else:
+		user_form = EditUserForm(request.POST, instance=request.user)
+	context_dict = {'user_form':user_form}
+	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
+
+
+#delete the user account
 @login_required
 def delete_account(request):
 
 	if request.method == 'POST':
-
+		#only do if the user is logged in
 		if request.user.is_authenticated:
+			#get the form
 			form = DeleteProfileForm(request.POST)
+			#get the user profile
 			userProf = UserProfile.objects.filter(user__exact=request.user).first()
+			#delete the userProfile object and the user object
 			userProf.delete()
 			request.user.delete()
 
@@ -185,6 +135,96 @@ def delete_account(request):
 	else:
 
 		return render(request, 'WeatherSTUFF/deleteaccount.html')
+
+
+#log the user out
+@login_required
+def user_logout(request):
+	logout(request)
+	return redirect(reverse('WeatherSTUFF:logged_out'))
+
+
+#page user redirected to after logged out
+def logged_out(request):
+	return render(request, 'WeatherSTUFF/logout.html')
+
+
+#add a favourite location
+def add_fav(request):
+	
+	#get the profile associated with the user
+	userProf = UserProfile.objects.filter(user__exact=request.user).first()
+
+	form = FavPlaceForm()
+
+	#process the form to add the favourite
+	if request.method=="POST":
+		form = FavPlaceForm(request.POST)
+		if form.is_valid():
+			fav_place = form.save(commit=False)
+			#assign the current user profile to the user field of the fav_place object
+			fav_place.user = userProf
+			fav_place.save()
+			#redirect the user to their myaccount page
+			return redirect(reverse('WeatherSTUFF:myaccount'))
+
+	return render(request, 'WeatherSTUFF/addfav.html', context={'form':form})
+
+
+#show the details of their favourite location
+def show_fav_place(request, fav_place_slug):
+	
+	#get the faovourite place
+	fav_place = FavouritePlace.objects.filter(slug=fav_place_slug).first()
+	form = FavPlaceForm()
+
+	#get all the pins
+	all_pins = Pin.objects.all()
+	pins = []
+
+	#check each pins, appending it to the list if it is close to our favourite location
+	for pin in all_pins:
+		diff_x = fav_place.x_val-pin.x_val
+		diff_y = fav_place.x_val-pin.x_val
+		distance = math.sqrt((diff_x**2)+(diff_y**2))
+		if distance<50:
+			pins.append(pin)
+	
+	#process the form to delete the favourite place
+	#if button pressed, the favourite place object is deleted from the model
+	if request.method=="POST":
+		form = FavPlaceForm(request.POST)
+		fav_place.delete()
+		#redirect the user to their myaccount page
+		return redirect(reverse('WeatherSTUFF:myaccount'))
+	return render(request, 'WeatherSTUFF/favPlace.html', context={'form':form, 'fav_place':fav_place, 'pins':pins})
+
+
+#show the details of the pin a user has created
+def show_pin(request, pin_name_slug):
+	context_dict={}
+	if request.method=='POST':
+		
+		if request.user.is_authenticated:
+			form = DeletePinForm(request.POST)
+			context_dict['form'] = form
+			try:
+				#get the pin that was clicked on, by using its unique slug value
+				pin = Pin.objects.get(slug=pin_name_slug)
+
+				context_dict['pin'] = pin
+
+				#delete the pins
+				pin.delete()
+
+			except Pin.DoesNotExist:
+
+				context_dict['pin'] = None
+				
+		context_dict['message'] = "You pin has been succesfully deleted"
+	
+
+	return render(request, 'WeatherSTUFF/pin.html', context=context_dict)
 
 
 # Receive a pin post request, save pin to server
@@ -225,6 +265,7 @@ def add_pin(request):
         #p.save()
         return HttpResponse(status=201)
 
+#get all the pins in the database
 def get_pins(request):
     # Don't bother checking for anything, just
     # return a json of all the get_pins
