@@ -1,11 +1,105 @@
-from django.test import TestCase
-from django.urls import reverse
-from WeatherSTUFF.models import UserProfile, Pin, FavouritePlace
-from django.contrib.auth.models import User
 import datetime
-from django.utils import timezone
-import pytz
+import json
 import random
+import time
+
+import pytest
+import pytz
+from django.contrib.auth.models import User
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import LiveServerTestCase, TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
+
+
+class SeleniumTests(StaticLiveServerTestCase):
+    def setUp(self):
+        User.objects.create_superuser(username='admin',
+                                      password='admin',
+                                      email='admin@example.com')
+
+        self.driver = webdriver.Firefox()
+        super(SeleniumTests, self).setUp()
+
+    def tearDown(self):
+        self.driver.quit()
+        super(SeleniumTests, self).tearDown()
+
+    def test_add_pin_while_not_signed_in(self):
+        """
+        Test to check that anonymous user cannot add a pin to the map
+        """
+
+        # Open index page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, "/")
+            )
+
+        # Go through steps of adding a pin
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-draw-marker").click()
+        ac.move_to_element(self.driver.find_element(By.ID, "mapContainer")).move_by_offset(30, 30).click().perform()
+        
+        # Wait for an error message for upto 3 seconds
+        for i in range(5):
+            try:
+                text = self.driver.switch_to.alert.text
+                break
+            except:
+                time.sleep(0.5)
+
+        # Either test alert for equality or fail if test times out
+        try:
+            self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
+        except:
+            self.assertEqual(True, False)
+        
+
+    def test_create_user(self):
+        """
+        Django admin create user test
+        Create a user in django admin and assert that
+        page is redirected to new user change form.
+        """
+
+        # Open the django admin page
+        # DjangoLiveServerTestCase provides live server url attribute
+        # to access the base url in tests
+
+        self.driver.get(
+            '%s%s' % (self.live_server_url, "/admin/")
+        )
+
+        # Fill login information of admin
+        username = self.driver.find_element_by_id("id_username")
+        username.send_keys("admin")
+        password = self.driver.find_element_by_id("id_password")
+        password.send_keys("admin")
+
+        # Locate Login button and click it
+        self.driver.find_element_by_xpath('//input[@value="Log in"]').click()
+        self.driver.get(
+            '%s%s' % (self.live_server_url, "/admin/auth/user/add/")
+        )
+
+        # Fill the create user form with username and password
+        self.driver.find_element_by_id("id_username").send_keys("test")
+        self.driver.find_element_by_id("id_password1").send_keys("test")
+        self.driver.find_element_by_id("id_password2").send_keys("test")
+
+        # Forms can be submitted directly by calling its method submit
+        self.driver.find_element_by_id("user_form").submit()
+        self.assertIn("Add user", self.driver.title)
 
 
 class PinMethodTests(TestCase):
@@ -16,29 +110,6 @@ class PinMethodTests(TestCase):
         user = generate_user()
         pin = generate_pin(user, num_ratings=-1)
         self.assertEqual((pin.num_ratings >= 0), True)
-
-class IndexViewTests(TestCase):
-    def test_index_view_with_no_pins(self):
-        """
-        If there are no pins, a message should be displayed
-        """
-        response = self.client.get(reverse('WeatherSTUFF:index'))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'There are no pins present.')
-
-    def test_pins_display(self):
-        user = generate_user()
-        p1 = generate_pin(user = user, title="rain")
-        p2 = generate_pin(user = user, title="fire")
-        p3 = generate_pin(user = user, title="flood")
-
-        response = self.client.get(reverse('WeatherSTUFF:index'))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "rain")
-        self.assertContains(response, "fire")
-        self.assertContains(response, "flood")
 
 class MyAccountViewTests(TestCase):
     def setUp(self):
@@ -62,7 +133,12 @@ class MyAccountViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Glasgow")
-        
+
+    def test_user_pins_displays(self):
+        pass
+
+    def test_logout(self):
+        pass
 
 
 def generate_date():
@@ -83,4 +159,3 @@ def generate_pin(user, num_ratings=0, rating=0, date=generate_date(), x_val=0, y
     pin = Pin(user=user, num_ratings = num_ratings, rating = rating, date=date, x_val=x_val, y_val=y_val)
     pin.save()
     return pin
-
