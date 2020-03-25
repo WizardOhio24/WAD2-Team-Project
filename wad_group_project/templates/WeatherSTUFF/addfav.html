@@ -7,7 +7,7 @@
 {% block body_block %}
 
     {% if user.is_authenticated %} 
-        <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
+        <h1 class="pageTitle" id="userAuthenticationTitle">{{ user.username }}</h1>
         <div class="description" id="addFav">
             Click here to get the coordinates of your favourite location
             <a href='https://www.latlong.net' class="buttonBox" id="linkButton">Get Coordinates</a>

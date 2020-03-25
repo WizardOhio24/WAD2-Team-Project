@@ -10,30 +10,34 @@
     
     {% if user.is_authenticated %} 
         <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
-        <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="deleteAccountButton">Delete Account</a>
-        <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="changeButton">Change Details</a>
+        <div class="authenticationDiv">
+            <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="accountButton">Delete Account</a>
+            <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="accountButton">Change Account</a>
+        </div>
+        
 
 
-        <div id="favouritePlaces">
-            Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
+        <div class="containerClass" id="favouritePlaces">
+            My Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
 
             <div class="listDiv">
                 <ul>
                     {% for fav_place in fav_places %}
-                    <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}" class="listItem">{{ fav_place.place_name }}</a></li>
+                        <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}">{{ fav_place.place_name }}</a></li>
+                        <br />
                     {% endfor %}
                 </ul>
        
             </div>
         </div>
 
-        <div id="pins">
-            Pins
-            <div class="listDiv" id="listPins">
+        <div class="containerClass" id="pins">
+            My Pins
+            <div class="listDiv">
                 <ul>
                 {% for pin in pins %}
                     
-                    <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}" class="listItem">{{ pin.title }}</a></li>
+                    <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}">{{ pin.title }}</a></li>
                     <li>{{ pin.content }}</li>
                     <br />
                     

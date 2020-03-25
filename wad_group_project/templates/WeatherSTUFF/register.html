@@ -8,11 +8,11 @@
 {% block body_block %}
 
 {% if registered %}
-<strong class="description" id="accountRegistered">Thank you for registering!</strong>
+<strong class="description" id="message">Thank you for registering!</strong>
 <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
 {% else %}
 <h1 class="pageTitle" id="userAuthenticationTitle">Register for WeatherSTUFF</h1> 
-<form id = "user_form" method = "post" action = "{% url 'WeatherSTUFF:register' %}"
+<form class="user_form" method = "post" action = "{% url 'WeatherSTUFF:register' %}"
     enctype = "multipart/form-data">
 
     {% csrf_token %}
