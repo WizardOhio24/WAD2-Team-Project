@@ -13,6 +13,7 @@ from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm, FavPlaceForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+#from django.contrib.auth.models import is_superuser
 from django.contrib.auth.decorators import login_required
 import math
 
@@ -106,7 +107,7 @@ def change_details(request):
 		user_form.actual_user = request.user
 		if user_form.is_valid():
 			user_form.save()
-			
+
 			return redirect(reverse('WeatherSTUFF:myaccount'))
 	else:
 		user_form = EditUserForm(request.POST, instance=request.user)
@@ -151,7 +152,7 @@ def logged_out(request):
 
 #add a favourite location
 def add_fav(request):
-	
+
 	#get the profile associated with the user
 	userProf = UserProfile.objects.filter(user__exact=request.user).first()
 
@@ -173,7 +174,7 @@ def add_fav(request):
 
 #show the details of their favourite location
 def show_fav_place(request, fav_place_slug):
-	
+
 	#get the faovourite place
 	fav_place = FavouritePlace.objects.filter(slug=fav_place_slug).first()
 	form = FavPlaceForm()
@@ -189,7 +190,7 @@ def show_fav_place(request, fav_place_slug):
 		distance = math.sqrt((diff_x**2)+(diff_y**2))
 		if distance<50:
 			pins.append(pin)
-	
+
 	#process the form to delete the favourite place
 	#if button pressed, the favourite place object is deleted from the model
 	if request.method=="POST":
@@ -204,7 +205,7 @@ def show_fav_place(request, fav_place_slug):
 def show_pin(request, pin_name_slug):
 	context_dict={}
 	if request.method=='POST':
-		
+
 		if request.user.is_authenticated:
 			form = DeletePinForm(request.POST)
 			context_dict['form'] = form
@@ -220,9 +221,9 @@ def show_pin(request, pin_name_slug):
 			except Pin.DoesNotExist:
 
 				context_dict['pin'] = None
-				
+
 		context_dict['message'] = "You pin has been succesfully deleted"
-	
+
 
 	return render(request, 'WeatherSTUFF/pin.html', context=context_dict)
 
@@ -240,9 +241,17 @@ def add_pin(request):
         except UserProfile.DoesNotExist:
             return HttpResponse(status=401, content="No User found, you are not logged in.")
 
+        # Check if the Pin exists, and if it does, then check if this user owns it
+        # or if the user if the admin
+        qSet = Pin.objects.filter(x_val = request.POST['lng'], y_val = request.POST['lat'])
+        if qSet.exists():
+            p = qSet.first()
+            if p != None:
+                if not request.user.is_superuser or not userProf == p.user:
+                    return HttpResponse(status=401, content="That is not your pin to change.")
+
         # If there is a pin in the same location and it is owned by the same user,
         # then update the pin currently at that location rather than creating a new one
-
         obj, created = Pin.objects.update_or_create(x_val = request.POST['lng'], y_val = request.POST['lat'], defaults={
         "user":userProf,
         "date":datenow,

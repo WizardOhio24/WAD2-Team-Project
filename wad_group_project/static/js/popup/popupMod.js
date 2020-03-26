@@ -1,29 +1,38 @@
 
-// ---- Note,the update is handled serverside, where it just
-// checks if the latitude and longditude are the same
+//  ----------------    Source code  ---------------------------- //
+// original from https://github.com/Leaflet/Leaflet/blob/master/src/layer/Popup.js
+// This code is a modified version of what is located there
+
+
+// Note,the update is handled serverside, where it just
+// checks if the latitude and longditude are the same,
+// if they are then it just updates the pin rather than
+// adding a new one
 function savePinUpdateToDatabase(layer){
-  console.log(layer['_popup']['options']['title'])
   $.ajax({
       type: 'POST',
       beforeSend: function(request) {
       request.setRequestHeader("X-CSRFToken", csrftoken);
       },
-      url: 'WeatherSTUFF/add_pin/', // this handles the post data //WeatherSTUFF WeatherSTUFF/about/
+      url: 'WeatherSTUFF/add_pin/', // this is the view that handles the post data
       dataType: 'json',
       data: {
                 'lat':layer['_latlng']['lat'],
                 'lng': layer['_latlng']['lng'],
-                'content': layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
+                'content': layer['_popup']['_content'] ,
                 'title': layer['_popup']['_titleField']['innerText'],
                 'date': '',//Date().toLocaleString(),
                 'csrfmiddlewaretoken': String(csrftoken),
              },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        if(XMLHttpRequest.status == "401"){
-          layer.remove();
-          //User profile not authenticated
-          alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
-        }
+        alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
+
+        // The changes didn't work so revert
+        layer['_popup']['_content'] = layer['_popup']['_prevContent'];
+        console.log(layer['_popup']['_prevTitle']);
+        layer['_popup']['_title']['innerText'] = layer['_popup']['_prevTitle'];
+        layer['_popup'].update();
+
       },
       //success: return true,
   });
@@ -51,8 +60,6 @@ L.Popup.include({
 
    // modifying the _initLayout method to include edit and remove buttons, if those options are enabled
 
-   //  ----------------    Source code  ---------------------------- //
-   // original from https://github.com/Leaflet/Leaflet/blob/master/src/layer/Popup.js
    _initLayout: function () {
       var prefix = 'leaflet-popup',
           container = this._container = L.DomUtil.create('div',
@@ -61,11 +68,6 @@ L.Popup.include({
 
       var wrapper = this._wrapper = L.DomUtil.create('div', prefix + '-content-wrapper', container);
 
-      // Added
-      //var title = this._title = L.DomUtil.create('b', prefix + '-content', wrapper);
-      //title.innerHTML = "Some title";
-
-      // New additions
       console.log(this.options);
       if(this.options.title){
         console.log(this.options.title);
@@ -73,10 +75,6 @@ L.Popup.include({
         var title = this._title = L.DomUtil.create('b', prefix + '-content', wrapper); // Change this css to look better
         title.innerHTML = this.options.title;
       }
-
-      //------------
-
-      //
 
       this._contentNode = L.DomUtil.create('div', prefix + '-content', wrapper);
 
@@ -94,12 +92,6 @@ L.Popup.include({
 
          L.DomEvent.on(closeButton, 'click', this._onCloseButtonClick, this);
       }
-
-      //  ----------------    Source code  ---------------------------- //
-
-
-
-      //  ---------------    My additions  --------------------------- //
 
       var nametag = this.options.nametag ? this.options.nametag : this._source.nametag;
 
@@ -215,6 +207,14 @@ L.Popup.include({
    },
 
    _onSaveButtonClick: function (e) {
+
+     // If the User is not authenticated, then may need to revert changes
+     // So store them
+
+     this._prevContent = this.getContent();
+     this._prevTitle = this._title.innerText;
+
+
       var inputField = this._inputField;
       if (inputField.innerHTML.length > 0){
          this.setContent(inputField.innerHTML)
@@ -227,13 +227,9 @@ L.Popup.include({
       var titleField = this._titleField;
       if (titleField.innerHTML.length > 0){
          this._title.innerHTML = titleField.innerHTML;
-         this._popup
       } else {
          alert('Enter something');
       };
-
-
-
 
       L.DomUtil.remove(this._editScreen);
       this._contentNode.style.display = "block";
@@ -241,7 +237,6 @@ L.Popup.include({
 
       this.update();
 
-      // Now save the results to the database
       //this._source.remove(); <-- To remove the Pin
 
       L.DomEvent.stop(e);
@@ -249,7 +244,6 @@ L.Popup.include({
       console.log(this._source)
 
       savePinUpdateToDatabase(this._source);
-      //  ---------------------End my additions --------------------------------------- //
 
 
    }
