@@ -73,9 +73,6 @@ class SeleniumTests(StaticLiveServerTestCase):
         """
 
         # Open the django admin page
-        # DjangoLiveServerTestCase provides live server url attribute
-        # to access the base url in tests
-
         self.driver.get(
             '%s%s' % (self.live_server_url, "/admin/")
         )
@@ -100,6 +97,23 @@ class SeleniumTests(StaticLiveServerTestCase):
         # Forms can be submitted directly by calling its method submit
         self.driver.find_element_by_id("user_form").submit()
         self.assertIn("Add user", self.driver.title)
+
+
+class SignUpTests(StaticLiveServerTestCase):
+    def setUp(self):
+        User.objects.create_superuser(username='admin',
+                                    password='admin',
+                                    email='admin@example.com')
+
+        self.driver = webdriver.Firefox()
+        super(SeleniumTests, self).setUp()
+
+    def tearDown(self):
+        self.driver.quit()
+        super(SeleniumTests, self).tearDown()
+
+    
+
 
 
 class PinMethodTests(TestCase):
