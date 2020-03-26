@@ -22,18 +22,18 @@ from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
 
 
-class SeleniumTests(StaticLiveServerTestCase):
+class MapTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
                                       password='admin',
                                       email='admin@example.com')
 
         self.driver = webdriver.Firefox()
-        super(SeleniumTests, self).setUp()
+        super(MapTests, self).setUp()
 
     def tearDown(self):
         self.driver.quit()
-        super(SeleniumTests, self).tearDown()
+        super(MapTests, self).tearDown()
 
     def test_add_pin_while_not_signed_in(self):
         """
@@ -50,7 +50,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-draw-marker").click()
         ac.move_to_element(self.driver.find_element(By.ID, "mapContainer")).move_by_offset(30, 30).click().perform()
-        
+
         # Wait for an error message for upto 3 seconds
         for i in range(5):
             try:
@@ -63,8 +63,207 @@ class SeleniumTests(StaticLiveServerTestCase):
         try:
             self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
         except:
-            self.assertEqual(True, False)
+            assert False
 
+    def test_edit_pin_while_not_signed_in(self):
+        """
+        Test to check that anonymous user cannot edit a pin on the map
+        """
+        user = generate_user()
+        pin = generate_pin(user = user, title = "TEST", content = "TEST")
+
+        # Open index page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, "/")
+            )
+
+        # Go through steps of adding a pin
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Edit").click()
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(1)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(2)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        self.driver.find_element(By.LINK_TEXT, "Save").click()
+
+        # Wait for an error message for upto 3 seconds
+        for i in range(5):
+            try:
+                text = self.driver.switch_to.alert.text
+                break
+            except:
+                time.sleep(0.5)
+
+        # Either test alert for equality or fail if test times out
+        try:
+            self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
+        except:
+            assert False
+
+    def test_add_pin_while_signed_in(self):
+        """
+        Test to check that a signed in user can add a pin to the map
+        """
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.LINK_TEXT, "Home").click()
+
+        # GO through steps of adding a pin
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-draw-marker").click()
+        ac.move_to_element(self.driver.find_element(By.ID, "mapContainer")).move_by_offset(30, 30).click().perform()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        #time.sleep(0.2)
+
+        # Check database for pins by the test user, wheck that pin has regestered
+        user = User.objects.get(username="test")
+        userProf = UserProfile.objects.get(user=user)
+        pin = Pin.objects.filter(user=userProf)
+
+        # Check that the user has added first pin to account
+        self.assertEqual(pin.count(), 1)
+        
+    def test_delete_pin_while_signed_in(self):
+        """
+        Test to check that a signed in user can delete their pins from map
+        """
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.LINK_TEXT, "Home").click()
+
+        # Go through steps of adding a pin
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-draw-marker").click()
+        ac.move_to_element(self.driver.find_element(By.ID, "mapContainer")).move_by_offset(30, 30).click().perform()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+
+        # Delete the pin
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-edit-remove").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        time.sleep(0.2)
+
+        # Check element is missing from map
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)")
+            assert False
+        except:
+            assert True
+
+        # Below is a test to check that the pin was deleted from database
+        """
+        # Check database for pins by the test user, wheck that pin has regestered
+        user = User.objects.get(username="test")
+        userProf = UserProfile.objects.get(user=user)
+        pin = Pin.objects.filter(user=userProf)
+
+        # Check that the user has added first pin to account
+        self.assertEqual(pin.count(), 0)
+        """
+
+    def test_edit_user_pin_while_signed_in(self):
+        """
+        Test to check that a signed in user can add a pin to the map
+        """
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.LINK_TEXT, "Home").click()
+
+        # GO through steps of adding a pin
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-draw-marker").click()
+        ac.move_to_element(self.driver.find_element(By.ID, "mapContainer")).move_by_offset(30, 30).click().perform()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Edit").click()
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(1)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(2)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        self.driver.find_element(By.LINK_TEXT, "Save").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        #time.sleep(0.2)
+
+        # Check database for pins by the test user, wheck that pin has regestered
+        user = User.objects.get(username="test")
+        userProf = UserProfile.objects.get(user=user)
+        pin = Pin.objects.filter(user=userProf)
+        print(pin[0])
+
+        # Check that the user has added first pin to account
+        self.assertEqual(pin.count(), 1)
+
+    def test_edit_other_user_pin_while_signed_in(self):
+        """
+        Test to check that anonymous user cannot edit a pin on the map
+        """
+        user = generate_user(username="bob")
+        pin = generate_pin(user = user, title = "TEST", content = "TEST")
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.LINK_TEXT, "Home").click()
+
+        # Go through steps of adding a pin
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Edit").click()
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(1)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        element = self.driver.find_element(By.CSS_SELECTOR, ".leaflet-popup-input:nth-child(2)")
+        self.driver.execute_script("if(arguments[0].contentEditable === 'true') {arguments[0].innerText = 'Edited'}", element)
+        self.driver.find_element(By.LINK_TEXT, "Save").click()
+
+        # Wait for an error message for upto 3 seconds
+        for i in range(5):
+            try:
+                text = self.driver.switch_to.alert.text
+                break
+            except:
+                time.sleep(0.5)
+
+        # Either test alert for equality or fail if test times out
+        try:
+            self.assertEquals(text, "Error 401 : That is not your pin to change.")
+        except:
+            assert False
 
 class SignUpTests(StaticLiveServerTestCase):
     def setUp(self):
@@ -203,33 +402,45 @@ class AboutViewTests(TestCase):
 
 
 class MyAccountViewTests(TestCase):
-    def setUp(self):
-        user = generate_user()
-        self.client.force_login(User.objects.get_or_create(username='test')[0])
 
     def test_favourite_place_displays(self):
         """
         If user has a favourite place, should display on page
         """
-
-        user = User.objects.get_or_create(username='test')[0]
-        userprofile = UserProfile.objects.get_or_create(user=user)[0]
+        user = generate_user()
+        self.client.force_login(User.objects.get_or_create(username='test')[0])
         place_name = "Glasgow"
         x_val = 0
         y_val = 0
-        place = FavouritePlace(place_name=place_name, x_val=x_val, y_val=y_val, user=userprofile)
+        place = FavouritePlace(place_name=place_name, x_val=x_val, y_val=y_val, user=user)
         place.save()
 
         response = self.client.get(reverse('WeatherSTUFF:myaccount'))
-
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Glasgow")
 
-    def test_user_pins_displays(self):
-        pass
+    def test_user_pins_display(self):
+        """
+        If user is not signed in, should display links to sign up/sign in
+        """
+        user = generate_user()
+        self.client.force_login(User.objects.get_or_create(username='test')[0])
+        pin = generate_pin(user=user, title="TESTDATATITLE", content="TESTDATACONTENT")
+        response = self.client.get(reverse('WeatherSTUFF:myaccount'))
 
-    def test_logout(self):
-        pass
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "TESTDATATITLE")
+        self.assertContains(response, "TESTDATACONTENT")
+
+    def test_links_for_anon_user(self):
+        """
+        If user is not signed in, should display links to sign up/sign in
+        """
+        response = self.client.get(reverse('WeatherSTUFF:myaccount'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sign In")
+        self.assertContains(response, "Sign Up")
 
 
 def generate_date():
@@ -248,5 +459,7 @@ def generate_user(username="test", email="test@test.com", password="xxx"):
 
 def generate_pin(user, num_ratings=0, rating=0, date=generate_date(), x_val=0, y_val=0, title="", content=""):
     pin = Pin(user=user, num_ratings = num_ratings, rating = rating, date=date, x_val=x_val, y_val=y_val)
+    pin.title = title
+    pin.content = content
     pin.save()
     return pin

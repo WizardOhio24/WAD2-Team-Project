@@ -56,7 +56,7 @@ class Pin(models.Model):
         super(Pin, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return "Pin Title: " + self.title + "\nContent: " + self.content + "\nUser: " + str(self.user)
 
     
    
