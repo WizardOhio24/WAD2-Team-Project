@@ -64,42 +64,6 @@ class SeleniumTests(StaticLiveServerTestCase):
             self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
         except:
             self.assertEqual(True, False)
-        
-
-    def test_create_user(self):
-        """
-        Django admin create user test
-        Create a user in django admin and assert that
-        page is redirected to new user change form.
-        """
-
-        # Open the django admin page
-
-        
-        self.driver.get(
-            '%s%s' % (self.live_server_url, "/admin/")
-        )
-
-        # Fill login information of admin
-        username = self.driver.find_element_by_id("id_username")
-        username.send_keys("admin")
-        password = self.driver.find_element_by_id("id_password")
-        password.send_keys("admin")
-
-        # Locate Login button and click it
-        self.driver.find_element_by_xpath('//input[@value="Log in"]').click()
-        self.driver.get(
-            '%s%s' % (self.live_server_url, "/admin/auth/user/add/")
-        )
-
-        # Fill the create user form with username and password
-        self.driver.find_element_by_id("id_username").send_keys("test")
-        self.driver.find_element_by_id("id_password1").send_keys("test")
-        self.driver.find_element_by_id("id_password2").send_keys("test")
-
-        # Forms can be submitted directly by calling its method submit
-        self.driver.find_element_by_id("user_form").submit()
-        self.assertIn("Add user", self.driver.title)
 
 
 class SignUpTests(StaticLiveServerTestCase):
@@ -215,7 +179,6 @@ class SignInTests(StaticLiveServerTestCase):
         url = self.driver.current_url
         my_account_url = '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:myaccount"))
         self.assertEquals(url, my_account_url)
-
 
 
 class PinMethodTests(TestCase):
