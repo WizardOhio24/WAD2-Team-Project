@@ -40,7 +40,7 @@ LOGIN_URL = 'WeatherSTUFF:login'
 # Application definition
 
 INSTALLED_APPS = [
-    'selenium',
+    #'selenium', # I don't think there's any need for this for the webapp
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
