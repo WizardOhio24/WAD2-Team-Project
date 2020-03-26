@@ -247,7 +247,7 @@ def add_pin(request):
         if qSet.exists():
             p = qSet.first()
             if p != None:
-                if not request.user.is_superuser or not userProf == p.user:
+                if (not request.user.is_superuser) and request.user.id != p.user.user.id:#str(userProf.user.username) != str(p.user.user.username):
                     return HttpResponse(status=401, content="That is not your pin to change.")
 
         # If there is a pin in the same location and it is owned by the same user,

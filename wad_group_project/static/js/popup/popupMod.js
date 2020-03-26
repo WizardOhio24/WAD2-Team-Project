@@ -25,13 +25,17 @@ function savePinUpdateToDatabase(layer){
                 'csrfmiddlewaretoken': String(csrftoken),
              },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
+        if(XMLHttpRequest.status == "401"){
+          //User profile not authenticated
+          // The changes didn't work so revert
+          layer['_popup']['_content'] = layer['_popup']['_prevContent'];
+          console.log(layer['_popup']['_prevTitle']);
+          layer['_popup']['_title']['innerText'] = layer['_popup']['_prevTitle'];
+          layer['_popup'].update();
+          alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
+        }
 
-        // The changes didn't work so revert
-        layer['_popup']['_content'] = layer['_popup']['_prevContent'];
-        console.log(layer['_popup']['_prevTitle']);
-        layer['_popup']['_title']['innerText'] = layer['_popup']['_prevTitle'];
-        layer['_popup'].update();
+
 
       },
       //success: return true,
