@@ -230,9 +230,12 @@ class PinMethodTests(TestCase):
 
 class AboutViewTests(TestCase):
     def test_about_content_displays(self):
-        response = self.client.get(reverse('WeatherSTUFF:myaccount'))
+        """
+        Check that about page displays correctly
+        """
+        response = self.client.get(reverse('WeatherSTUFF:about'))
         self.assertEqual(response.status_code, 200)
-        text = "We are a group of university students who are interested in the impact that climate change is having on the world." 
+        text = "We are a group of university students" 
         self.assertContains(response, text)
 
 
