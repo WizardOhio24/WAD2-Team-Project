@@ -2,6 +2,7 @@ import datetime
 import json
 import random
 import time
+import re
 
 import pytest
 import pytz
@@ -140,6 +141,82 @@ class SignUpTests(StaticLiveServerTestCase):
         except:
             self.assertFalse(True)
     
+
+    def test_sign_up_user_already_exists(self):
+        """
+        Tests that trying to sign up with a username which is already taken 
+        results in a message being displayed
+        """
+        user = generate_user(username="bobby")
+
+        # Get the register page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Sign up with a new user 'test'
+        self.driver.find_element(By.ID, "id_username").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("bobby")
+        self.driver.find_element(By.ID, "id_password").click()
+        self.driver.find_element(By.ID, "id_password").send_keys("test123")
+        self.driver.find_element(By.ID, "registerButton").click()
+
+        src = self.driver.page_source
+        text_found = re.search(r'A user with that username already exists.', src)
+        self.assertNotEqual(text_found, None)
+
+
+class SignInTests(StaticLiveServerTestCase):
+    def setUp(self):
+        User.objects.create_superuser(username='admin',
+                                    password='admin',
+                                    email='admin@example.com')
+
+        self.driver = webdriver.Firefox()
+        super(SignInTests, self).setUp()
+
+    def tearDown(self):
+        self.driver.quit()
+        super(SignInTests, self).tearDown()
+    
+        
+    def test_invalid_sign_in_credentials(self):
+        """
+        Tests that a sign up results in a user being added to the database
+        """
+
+        # Get the register page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:login"))
+            )
+
+        # Sign up with a new user 'test'
+        self.driver.find_element(By.NAME, "username").send_keys("unknownuser")
+        self.driver.find_element(By.NAME, "password").send_keys("unknown")
+        self.driver.find_element(By.ID, "loginButton").click()
+
+        src = self.driver.page_source
+        text_found = re.search(r'Invalid login details, please try again', src)
+        self.assertNotEqual(text_found, None)
+
+    def test_valid_sign_in_credentials(self):
+        """
+        Tests that a sign up results in a user being added to the database
+        """
+
+        # Get the register page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:login"))
+            )
+
+        # Sign up with a new user 'test'
+        self.driver.find_element(By.NAME, "username").send_keys("admin")
+        self.driver.find_element(By.NAME, "password").send_keys("admin")
+        self.driver.find_element(By.ID, "loginButton").click()
+
+        url = self.driver.current_url
+        my_account_url = '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:myaccount"))
+        self.assertEquals(url, my_account_url)
 
 
 
