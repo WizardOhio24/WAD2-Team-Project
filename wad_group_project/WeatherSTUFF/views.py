@@ -211,7 +211,7 @@ def show_pin(request, pin_name_slug):
 			context_dict['form'] = form
 			try:
 				#get the pin that was clicked on, by using its unique slug value
-				pin = Pin.objects.get(slug=pin_name_slug)
+				pin = Pin.objects.filter(slug=pin_name_slug).first()
 
 				context_dict['pin'] = pin
 

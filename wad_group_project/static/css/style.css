@@ -205,12 +205,25 @@ body{
     left:30%;
 }
 
+#returnDeleteButton{
+    position:absolute;
+    top:90%;
+    left:10%;
+    height:40%;
+    width:60%;
+    position:absolute;
+    margin-top:2%;
+    font-size:90%;
+
+}
+
 #deleteButton{
     position:absolute;
-    height:70%;
-    width:30%;
-    position:absolute;
+    top:80%;
     left:32%;
+    height:70%;
+    width:40%;
+    position:absolute;
     margin-top:2%;
     font-size:90%;
 
@@ -221,6 +234,9 @@ body{
     padding: 20px 40px;
     font-size:100%;   
 }
+
+
+
 
 
 
@@ -327,6 +343,12 @@ ul{
     position:absolute;
     top:45%;
     left:25%;
+}
+
+#getButton{
+    position:absolute;
+    top:90%;
+    left:28%;
 }
 
 #favPlaceDiv{

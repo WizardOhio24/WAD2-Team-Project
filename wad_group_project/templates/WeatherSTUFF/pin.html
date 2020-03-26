@@ -8,8 +8,11 @@
 
     <!-- if a message was passed in from the view, then the pin has been deleted and the user is told about this -->
     {% if message %}
-        <strong class="description" id="accountDeleted">{{ message }}</strong>
-        <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
+
+        <div class="description" id="deleteDiv">
+        <strong>{{ message }}</strong>
+        <a href = "/" class="buttonBox" id="returnDeleteButton">Return to the homepage</a></br />
+        </div>
 
     {% else %}
 
