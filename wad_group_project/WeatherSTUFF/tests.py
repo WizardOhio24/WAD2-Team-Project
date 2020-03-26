@@ -102,8 +102,6 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.assertIn("Add user", self.driver.title)
 
 
-
-
 class SignUpTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -228,6 +226,15 @@ class PinMethodTests(TestCase):
         user = generate_user()
         pin = generate_pin(user, num_ratings=-1)
         self.assertEqual((pin.num_ratings >= 0), True)
+
+
+class AboutViewTests(TestCase):
+    def test_about_content_displays(self):
+        response = self.client.get(reverse('WeatherSTUFF:myaccount'))
+        self.assertEqual(response.status_code, 200)
+        text = "We are a group of university students who are interested in the impact that climate change is having on the world." 
+        self.assertContains(response, text)
+
 
 class MyAccountViewTests(TestCase):
     def setUp(self):
