@@ -65,7 +65,7 @@ class MapTests(StaticLiveServerTestCase):
         except:
             assert False
 
-    def test_edit_pin_while_not_signed_in(self):
+    def test_edit_pin_not_signed_in(self):
         """
         Test to check that anonymous user cannot edit a pin on the map
         """
@@ -102,7 +102,7 @@ class MapTests(StaticLiveServerTestCase):
         except:
             assert False
 
-    def test_add_pin_while_signed_in(self):
+    def test_add_pin_signed_in(self):
         """
         Test to check that a signed in user can add a pin to the map
         """
@@ -134,7 +134,7 @@ class MapTests(StaticLiveServerTestCase):
         # Check that the user has added first pin to account
         self.assertEqual(pin.count(), 1)
         
-    def test_delete_pin_while_signed_in(self):
+    def test_delete_user_pin(self):
         """
         Test to check that a signed in user can delete their pins from map
         """
@@ -180,9 +180,10 @@ class MapTests(StaticLiveServerTestCase):
         self.assertEqual(pin.count(), 0)
         """
 
-    def test_edit_user_pin_while_signed_in(self):
+    def test_edit_user_pin(self):
         """
-        Test to check that a signed in user can add a pin to the map
+        Test to check that a signed in user can edit their 
+        own pin on the map
         """
 
         # Open signup page
@@ -215,14 +216,13 @@ class MapTests(StaticLiveServerTestCase):
         user = User.objects.get(username="test")
         userProf = UserProfile.objects.get(user=user)
         pin = Pin.objects.filter(user=userProf)
-        print(pin[0])
 
         # Check that the user has added first pin to account
-        self.assertEqual(pin.count(), 1)
+        self.assertEqual(str(pin[0]), "Edited")
 
-    def test_edit_other_user_pin_while_signed_in(self):
+    def test_edit_non_user_pin(self):
         """
-        Test to check that anonymous user cannot edit a pin on the map
+        Test to check that users can't edit each others pins
         """
         user = generate_user(username="bob")
         pin = generate_pin(user = user, title = "TEST", content = "TEST")
@@ -343,7 +343,7 @@ class SignInTests(StaticLiveServerTestCase):
         
     def test_invalid_sign_in_credentials(self):
         """
-        Tests that a sign up results in a user being added to the database
+        Tests that a sign in with wrong details displays an error
         """
 
         # Get the register page
@@ -362,7 +362,7 @@ class SignInTests(StaticLiveServerTestCase):
 
     def test_valid_sign_in_credentials(self):
         """
-        Tests that a sign up results in a user being added to the database
+        Tests that a sucessful sign in redirects to my account page
         """
 
         # Get the register page
@@ -421,7 +421,7 @@ class MyAccountViewTests(TestCase):
 
     def test_user_pins_display(self):
         """
-        If user is not signed in, should display links to sign up/sign in
+        If user has pins, should display on page
         """
         user = generate_user()
         self.client.force_login(User.objects.get_or_create(username='test')[0])
