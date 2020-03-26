@@ -73,6 +73,8 @@ class SeleniumTests(StaticLiveServerTestCase):
         """
 
         # Open the django admin page
+
+        
         self.driver.get(
             '%s%s' % (self.live_server_url, "/admin/")
         )
@@ -99,6 +101,8 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.assertIn("Add user", self.driver.title)
 
 
+
+
 class SignUpTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -106,12 +110,35 @@ class SignUpTests(StaticLiveServerTestCase):
                                     email='admin@example.com')
 
         self.driver = webdriver.Firefox()
-        super(SeleniumTests, self).setUp()
+        super(SignUpTests, self).setUp()
 
     def tearDown(self):
         self.driver.quit()
-        super(SeleniumTests, self).tearDown()
+        super(SignUpTests, self).tearDown()
 
+    def test_valid_sign_up(self):
+        """
+        Tests that a sign up results in a user being added to the database
+        """
+
+        # Get the register page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Sign up with a new user 'test'
+        self.driver.find_element(By.ID, "id_username").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").click()
+        self.driver.find_element(By.ID, "id_password").send_keys("test123")
+        self.driver.find_element(By.ID, "registerButton").click()
+
+        # Check that new user added to database sucessfully
+        try:
+            user = User.objects.get(username='test')
+            self.assertIsNotNone(user)
+        except:
+            self.assertFalse(True)
     
 
 
