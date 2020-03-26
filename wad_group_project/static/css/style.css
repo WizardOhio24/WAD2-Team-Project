@@ -354,13 +354,13 @@ ul{
 #favPlaceDiv{
     position:absolute;
     top:60%;
-    left:33%;
-    text-align:right;
+    right:37%;
+    text-align: right;
 }
 
 #addFavButton{
     position:absolute;
-    left:32%;
+    right:12%;
     top:100%;
     text-align:center;
     width:40%;

@@ -18,11 +18,11 @@ class UserProfile(models.Model):
         return self.user.username
 
 class FavouritePlace(models.Model):
-    place_name = models.CharField(max_length=200)
+    place_name = models.CharField(max_length=200, unique=True)
     x_val = models.FloatField()
     y_val = models.FloatField()
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.place_name)
@@ -52,7 +52,7 @@ class Pin(models.Model):
         if self.num_ratings < 0:
             self.num_ratings = 0
 
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.id)
         super(Pin, self).save(*args, **kwargs)
 
     def __str__(self):
