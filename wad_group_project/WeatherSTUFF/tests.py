@@ -32,6 +32,27 @@ class PinMethodTests(TestCase):
         pin = generate_pin(user, num_ratings=-1)
         self.assertEqual((pin.num_ratings >= 0), True)
 
+    def test_valid_pin(self):
+        user = generate_user()
+        date = generate_date()
+        pin = generate_pin(user = user,
+                           date = date,
+                           title = "testtitle",
+                           content = "testcontent",
+                           rating = 5,
+                           num_ratings = 10,
+                           x_val = 0,
+                           y_val = 50)
+
+        self.assertEqual(pin.user, user)
+        self.assertEqual(pin.date, date)
+        self.assertEqual(pin.title, "testtitle")
+        self.assertEqual(pin.content, "testcontent")
+        self.assertEqual(pin.rating, 5)
+        self.assertEqual(pin.num_ratings, 10)
+        self.assertEqual(pin.x_val, 0)
+        self.assertEqual(pin.y_val, 50)
+
     def test_pin_to_string(self):
         """
         Checks to make sure that correct string is returned
@@ -113,6 +134,27 @@ class UserProfileMethodTests(TestCase):
         
         self.assertEqual(str(user), "tester")
 
+    def test_valid_user(self):
+        user = generate_user(username='test',
+                             email = "test@test.com",
+                             password = "test")
+
+        self.assertEqual(user.user.username, 'test')
+        self.assertEqual(user.user.email, 'test@test.com')
+        self.assertEqual(user.user.password, 'test')
+
+    def test_add_pin_to_user(self):
+        user = generate_user()
+        pin = generate_pin(user)
+        pins = Pin.objects.filter(user=user)
+        self.assertEqual(pins.count(), 1)
+
+    def test_add_favourite_place_to_user(self):
+        user = generate_user()
+        place = generate_favourite_place(user)
+        places = FavouritePlace.objects.filter(user=user)
+        self.assertEqual(places.count(), 1)
+
 
 class FavouritePlaceMethodTests(TestCase):
     def test_favourite_place_to_string(self):
@@ -121,9 +163,19 @@ class FavouritePlaceMethodTests(TestCase):
         """
         user = generate_user()
         place = generate_favourite_place(user, place_name="test")
-
         self.assertEqual(str(place), "test")
 
+    def test_valid_favourite_place(self):
+        user = generate_user()
+        place = generate_favourite_place(user = user,
+                                         place_name = "test",
+                                         x_val = 0,
+                                         y_val = 10)
+
+        self.assertEqual(place.user, user)
+        self.assertEqual(place.place_name, "test")
+        self.assertEqual(place.x_val, 0)
+        self.assertEqual(place.y_val, 10)
 
 class PopulateScriptTest(TestCase):
     def test_populate_users(self):
@@ -135,6 +187,11 @@ class PopulateScriptTest(TestCase):
         populate()
         pins = Pin.objects.all()
         self.assertEquals(pins.count(), 11)
+
+    def test_populate_favourite_places(self):
+        populate()
+        places = FavouritePlace.objects.all()
+        self.assertEquals(places.count(), 5)
         
 
 class MapTests(StaticLiveServerTestCase):
