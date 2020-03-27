@@ -10,12 +10,13 @@ import datetime
 from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, EditUserForm, FavPlaceForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.models import is_superuser
 from django.contrib.auth.decorators import login_required
 import math
+
 
 
 #home page
@@ -46,9 +47,9 @@ def sign_up(request):
 
 			profile = profile_form.save(commit = False)
 			profile.user = user
-
-			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
+			
+			if 'profile_picture' in request.FILES:
+				profile.profile_picture = request.FILES['profile_picture']
 			profile.save()
 
 			registered = True
@@ -101,17 +102,24 @@ def my_account(request):
 
 
 # Edit an existing account
+@login_required
 def change_details(request):
+	userProf = UserProfile.objects.filter(user__exact=request.user).first()
 	if request.method=='POST':
-		user_form = EditUserForm(request.POST, instance=request.user)
-		user_form.actual_user = request.user
-		if user_form.is_valid():
-			user_form.save()
 
-			return redirect(reverse('WeatherSTUFF:myaccount'))
+		user_form = UserEditForm(request.POST, instance=request.user)
+		profile_form = ProfileEditForm(request.POST, instance=userProf)
+
+
+		if user_form.is_valid() and profile_form.is_valid():
+			user_form.save()
+			profile_form.save()
+				
+		return redirect(reverse('WeatherSTUFF:myaccount'))
 	else:
-		user_form = EditUserForm(request.POST, instance=request.user)
-	context_dict = {'user_form':user_form}
+		user_form = UserEditForm(request.POST, instance=request.user)
+		profile_form = ProfileEditForm(request.POST, instance=userProf)
+	context_dict = {'user_form':user_form, 'profile_form':profile_form}
 	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
 
 
