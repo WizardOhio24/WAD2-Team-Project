@@ -45,6 +45,8 @@ class MapTests(StaticLiveServerTestCase):
             '%s%s' % (self.live_server_url, "/")
             )
 
+        time.sleep(10)
+
         # Go through steps of adding a pin
         ac = ActionChains(self.driver)
         self.driver.set_window_size(550, 693)
@@ -327,6 +329,7 @@ class SignUpTests(StaticLiveServerTestCase):
         self.assertNotEqual(text_found, None)
 
 
+
 class SignInTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -441,6 +444,83 @@ class MyAccountViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Sign In")
         self.assertContains(response, "Sign Up")
+
+
+class MyAccountSeleniumTests(StaticLiveServerTestCase):
+    def setUp(self):
+        User.objects.create_superuser(username='admin',
+                                    password='admin',
+                                    email='admin@example.com')
+
+        self.driver = webdriver.Firefox()
+        super(MyAccountSeleniumTests, self).setUp()
+
+    def tearDown(self):
+        self.driver.quit()
+        super(MyAccountSeleniumTests, self).tearDown()
+
+    def test_delete_user_account(self):
+        """
+        Test that a users deleted account is permenantly removed from database
+        """
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+
+        # Go through steps of deleting account
+        self.driver.find_element(By.LINK_TEXT, "My Account").click()
+        self.driver.find_element(By.ID, "accountButton").click()
+        self.driver.find_element(By.ID, "deleteButton").click()
+
+        # Check that user has been deleted from database
+        try:
+            user = User.objects.get(username="test")
+            assert False
+        except User.DoesNotExist:
+            assert True
+
+    def test_change_user_account_details(self):
+
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "registerButton").click()
+
+        # Go through steps of changing details
+        self.driver.find_element(By.LINK_TEXT, "My Account").click()
+        self.driver.find_element(By.LINK_TEXT, "Change Account").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("newtest")
+        self.driver.find_element(By.ID, "id_password").send_keys("newtest")
+        self.driver.find_element(By.ID, "updateButton").click()
+
+        # Check that username has changed sucessfully
+        try:
+            user = User.objects.get(username="newtest")
+            # Check that old username no longer exists
+            try:
+                old_user = User.objects.get(username="test")
+                assert False
+            except User.DoesNotExist:
+                assert True   
+        except User.DoesNotExist:
+            assert False
 
 
 def generate_date():
