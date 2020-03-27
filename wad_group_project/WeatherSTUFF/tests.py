@@ -34,6 +34,9 @@ class PinMethodTests(TestCase):
         self.assertEqual((pin.num_ratings >= 0), True)
 
     def test_valid_pin(self):
+        """
+        Checks that a valid pin is added sucessfully
+        """
         user = generate_user()
         date = generate_date()
         pin = generate_pin(user = user,
@@ -63,6 +66,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(str(pin), "test")
 
     def test_change_title(self):
+        """
+        Checks that pin title changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, title="test")
         pin.title = "newtest"
@@ -70,6 +76,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.title, "newtest")
     
     def test_change_content(self):
+        """
+        Checks that pin content changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, content="test")
         pin.content = "newtest"
@@ -77,6 +86,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.content, "newtest")
 
     def test_change_x_val(self):
+        """
+        Checks that pin x_val changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, x_val=0)
         pin.x_val = 1
@@ -84,6 +96,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.x_val, 1)
     
     def test_change_y_val(self):
+        """
+        Checks that pin y_val changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, y_val=0)
         pin.y_val = 1
@@ -91,6 +106,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.y_val, 1)
 
     def test_change_date(self):
+        """
+        Checks that pin date changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user)
         date = generate_date()
@@ -99,6 +117,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.date, date)
 
     def test_change_rating(self):
+        """
+        Checks that pin rating changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, rating=10)
         pin.rating = 11
@@ -106,6 +127,9 @@ class PinMethodTests(TestCase):
         self.assertEqual(pin.rating, 11)
 
     def test_change_num_ratings(self):
+        """
+        Checks that pin num_ratings changes are reflected
+        """
         user = generate_user()
         pin = generate_pin(user=user, num_ratings = 10)
         pin.num_ratings = 11
@@ -136,6 +160,9 @@ class UserProfileMethodTests(TestCase):
         self.assertEqual(str(user), "tester")
 
     def test_valid_user(self):
+        """
+        Checks that a valid user is added sucessfully
+        """
         user = generate_user(username='test',
                              email = "test@test.com",
                              password = "test")
@@ -145,12 +172,18 @@ class UserProfileMethodTests(TestCase):
         self.assertEqual(user.user.password, 'test')
 
     def test_add_pin_to_user(self):
+        """
+        Checks that pins can be added to user profiles
+        """
         user = generate_user()
         pin = generate_pin(user)
         pins = Pin.objects.filter(user=user)
         self.assertEqual(pins.count(), 1)
 
     def test_add_favourite_place_to_user(self):
+        """
+        Checks that favourite places can be added to user profiles
+        """
         user = generate_user()
         place = generate_favourite_place(user)
         places = FavouritePlace.objects.filter(user=user)
@@ -167,6 +200,9 @@ class FavouritePlaceMethodTests(TestCase):
         self.assertEqual(str(place), "test")
 
     def test_valid_favourite_place(self):
+        """
+        Checks that a valid favourite place can be added
+        """
         user = generate_user()
         place = generate_favourite_place(user = user,
                                          place_name = "test",
@@ -180,16 +216,25 @@ class FavouritePlaceMethodTests(TestCase):
 
 class PopulateScriptTest(TestCase):
     def test_populate_users(self):
+        """
+        Checks that users populate correctly
+        """
         populate()
         users = UserProfile.objects.all()
         self.assertEquals(users.count(), 4)
 
     def test_populate_pins(self):
+        """
+        Checks that pins populate properly
+        """
         populate()
         pins = Pin.objects.all()
         self.assertEquals(pins.count(), 11)
 
     def test_populate_favourite_places(self):
+        """
+        Checks favourite place populates correctly
+        """
         populate()
         places = FavouritePlace.objects.all()
         self.assertEquals(places.count(), 5)
@@ -197,36 +242,57 @@ class PopulateScriptTest(TestCase):
 
 class FormTests(TestCase):
     def test_user_form(self):
+        """
+        Tests user form is valid
+        """
         form_data = {'username': 'test', 'password': 'test'}
         form = UserForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_fav_place_form(self):
+        """
+        Tests favourite place form is valid
+        """
         form_data = {'place_name': 'test', 'x_val': 0, 'y_val': 0}
         form = FavPlaceForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_user_profile_form(self):
+        """
+        Tests user profile form is valid
+        """
         form_data = {'profile_picture': None}
         form = UserProfileForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_user_edit_form(self):
+        """
+        Tests user edit form is valid
+        """
         form_data = {'username': 'test', 'password': 'test'}
         form = UserEditForm(form_data)
         self.assertTrue(form.is_valid())
     
     def test_user_delete_form(self):
+        """
+        Tests user delete form is valid
+        """
         form_data = {}
         form = DeleteProfileForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_profile_edit_form(self):
+        """
+        Tests that profile edit form is valid
+        """
         form_data = {'username': 'test', 'password': 'test'}
         form = ProfileEditForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_delete_pin_form(self):
+        """
+        Tests delete pin form is valid
+        """
         form_data = {}
         form = DeletePinForm(self)
         self.assertTrue(form.is_valid())
@@ -535,6 +601,7 @@ class SignUpTests(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "id_password").send_keys("test123")
         self.driver.find_element(By.ID, "registerButton").click()
 
+        # Check error message is displayed
         src = self.driver.page_source
         text_found = re.search(r'A user with that username already exists.', src)
         self.assertNotEqual(text_found, None)
