@@ -8,7 +8,7 @@ django.setup()
 import datetime
 from django.utils import timezone
 import pytz
-from WeatherSTUFF.models import UserProfile, Pin
+from WeatherSTUFF.models import UserProfile, Pin, FavouritePlace
 from django.contrib.auth.models import User
 import random
 from django.db import IntegrityError
@@ -122,10 +122,42 @@ def populate():
          },
     ]
 
-    users = {'richard': {'pins': user_A_pins, 'f_name': 'Richard', 'l_name': 'Menzies', 'email': 'richard@menzies.com'},
-             'kieran': {'pins': user_B_pins, 'f_name': 'Kieran', 'l_name': 'Grant', 'email': 'kieran@grant.org'},
-             'david': {'pins': user_C_pins, 'f_name': 'David', 'l_name': 'O\'Neill', 'email': 'david@oneill.gov'},
-             'mia': {'pins': user_D_pins, 'f_name': 'Mia', 'l_name': 'Stevenson', 'email': 'mia@stevenson.co.uk'}
+    user_A_favourite_places = [
+        {'place_name': 'Glasgow',
+         'x_val': -3.605120,
+         'y_val': 55.070858,
+        },
+        {'place_name': 'Ardno',
+         'x_val': -4.948221,
+         'y_val': 56.217726,
+        },
+    ]
+
+    user_B_favourite_places = [
+         {'place_name': 'Pompeii',
+         'x_val': 14.498059,
+         'y_val': 40.745448,
+         },
+    ]
+
+    user_C_favourite_places = [
+        {'place_name': 'Sydney',
+         'x_val': 150.981930,
+         'y_val': -33.403931,
+         },
+    ]
+
+    user_D_favourite_places = [
+        {'place_name': 'Berlin',
+         'x_val': 13.830021,
+         'y_val': 52.141750,
+         },
+    ]
+
+    users = {'richard': {'pins': user_A_pins, 'favourite_places': user_A_favourite_places,'f_name': 'Richard', 'l_name': 'Menzies', 'email': 'richard@menzies.com'},
+             'kieran': {'pins': user_B_pins, 'favourite_places': user_B_favourite_places,'f_name': 'Kieran', 'l_name': 'Grant', 'email': 'kieran@grant.org'},
+             'david': {'pins': user_C_pins, 'favourite_places': user_C_favourite_places,'f_name': 'David', 'l_name': 'O\'Neill', 'email': 'david@oneill.gov'},
+             'mia': {'pins': user_D_pins, 'favourite_places': user_D_favourite_places,'f_name': 'Mia', 'l_name': 'Stevenson', 'email': 'mia@stevenson.co.uk'}
     }
 
     # The code below goes through the users dictionary, then adds each category, 
@@ -136,9 +168,13 @@ def populate():
         for p in user_data['pins']:
             add_pin(u, p)
 
+        for l in user_data['favourite_places']:
+            add_favourite_place(u, l)
+
     for c in UserProfile.objects.all():
         for p in Pin.objects.filter(user = c):
             print(f' - {c}: {p}')
+
 
 def add_user(user, user_data):
     f_name = user_data['f_name']
@@ -165,6 +201,14 @@ def add_pin(u, data):
 
     p.save()
     return p
+
+def add_favourite_place(u, data):
+    f = FavouritePlace.objects.get_or_create(user=u,
+                                             place_name=data['place_name'],
+                                             x_val=data['x_val'],
+                                             y_val=data['y_val'])[0]
+    f.save()
+    return f
 
 def generate_date():
     return datetime.datetime(year=random.randint(2010, 2020),

@@ -20,6 +20,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
+from populate import populate
 
 
 class PinMethodTests(TestCase):
@@ -38,6 +39,56 @@ class PinMethodTests(TestCase):
         user = generate_user()
         pin = generate_pin(user, title="test")
         self.assertEqual(str(pin), "test")
+
+    def test_change_title(self):
+        user = generate_user()
+        pin = generate_pin(user=user, title="test")
+        pin.title = "newtest"
+        pin.save()
+        self.assertEqual(pin.title, "newtest")
+    
+    def test_change_content(self):
+        user = generate_user()
+        pin = generate_pin(user=user, content="test")
+        pin.content = "newtest"
+        pin.save()
+        self.assertEqual(pin.content, "newtest")
+
+    def test_change_x_val(self):
+        user = generate_user()
+        pin = generate_pin(user=user, x_val=0)
+        pin.x_val = 1
+        pin.save()
+        self.assertEqual(pin.x_val, 1)
+    
+    def test_change_y_val(self):
+        user = generate_user()
+        pin = generate_pin(user=user, y_val=0)
+        pin.y_val = 1
+        pin.save()
+        self.assertEqual(pin.y_val, 1)
+
+    def test_change_date(self):
+        user = generate_user()
+        pin = generate_pin(user=user)
+        date = generate_date()
+        pin.date = date
+        pin.save()
+        self.assertEqual(pin.date, date)
+
+    def test_change_rating(self):
+        user = generate_user()
+        pin = generate_pin(user=user, rating=10)
+        pin.rating = 11
+        pin.save()
+        self.assertEqual(pin.rating, 11)
+
+    def test_change_num_ratings(self):
+        user = generate_user()
+        pin = generate_pin(user=user, num_ratings = 10)
+        pin.num_ratings = 11
+        pin.save()
+        self.assertEqual(pin.num_ratings, 11)
 
 
 class UserProfileMethodTests(TestCase):
@@ -73,6 +124,18 @@ class FavouritePlaceMethodTests(TestCase):
 
         self.assertEqual(str(place), "test")
 
+
+class PopulateScriptTest(TestCase):
+    def test_populate_users(self):
+        populate()
+        users = UserProfile.objects.all()
+        self.assertEquals(users.count(), 4)
+
+    def test_populate_pins(self):
+        populate()
+        pins = Pin.objects.all()
+        self.assertEquals(pins.count(), 11)
+        
 
 class MapTests(StaticLiveServerTestCase):
     def setUp(self):
