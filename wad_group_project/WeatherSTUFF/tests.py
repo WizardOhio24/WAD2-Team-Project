@@ -20,6 +20,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, UserEditForm, DeletePinForm, FavPlaceForm, ProfileEditForm
 from populate import populate
 
 
@@ -193,6 +194,43 @@ class PopulateScriptTest(TestCase):
         places = FavouritePlace.objects.all()
         self.assertEquals(places.count(), 5)
         
+
+class FormTests(TestCase):
+    def test_user_form(self):
+        form_data = {'username': 'test', 'password': 'test'}
+        form = UserForm(form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_fav_place_form(self):
+        form_data = {'place_name': 'test', 'x_val': 0, 'y_val': 0}
+        form = FavPlaceForm(form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_user_profile_form(self):
+        form_data = {'profile_picture': None}
+        form = UserProfileForm(form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_user_edit_form(self):
+        form_data = {'username': 'test', 'password': 'test'}
+        form = UserEditForm(form_data)
+        self.assertTrue(form.is_valid())
+    
+    def test_user_delete_form(self):
+        form_data = {}
+        form = DeleteProfileForm(form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_profile_edit_form(self):
+        form_data = {'username': 'test', 'password': 'test'}
+        form = ProfileEditForm(form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_delete_pin_form(self):
+        form_data = {}
+        form = DeletePinForm(self)
+        self.assertTrue(form.is_valid())
+
 
 class MapTests(StaticLiveServerTestCase):
     def setUp(self):
