@@ -12,6 +12,11 @@
 
         <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
 
+        {% if userProf.profile_picture %}
+        <img src="{{ userProf.profile_picture.url }}" width=10%/>
+        {% endif %}
+
+
         <!-- give the logged in user the option to either edit or delete their account-->
         <div class="authenticationDiv">
             <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="accountButton">Delete Account</a>
