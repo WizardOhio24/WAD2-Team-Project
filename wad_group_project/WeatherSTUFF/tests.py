@@ -392,6 +392,22 @@ class PinMethodTests(TestCase):
         pin = generate_pin(user, num_ratings=-1)
         self.assertEqual((pin.num_ratings >= 0), True)
 
+class UserProfileMethodTests(TestCase):
+    def test_ensure_pins_delete_on_user_delete(self):
+        """
+        Checks to make sure that the number of ratings for a Pin is non-zero.
+        """
+        user = generate_user()
+        pin1 = generate_pin(user, title="test1")
+        pin2 = generate_pin(user, title="test2")
+        pin3 = generate_pin(user, title="test3")
+        user.delete()
+
+        pins = Pin.objects.filter(user=user)
+        self.assertEqual(pins.count(), 0)
+
+        #self.assertEqual((pin.num_ratings >= 0), True)
+
 
 class AboutViewTests(TestCase):
     def test_about_content_displays(self):
