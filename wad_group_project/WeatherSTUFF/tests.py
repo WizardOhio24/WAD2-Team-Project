@@ -22,6 +22,58 @@ from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
 
 
+class PinMethodTests(TestCase):
+    def test_ensure_num_ratings_are_positive(self):
+        """
+        Checks to make sure that the number of ratings for a Pin is non-zero.
+        """
+        user = generate_user()
+        pin = generate_pin(user, num_ratings=-1)
+        self.assertEqual((pin.num_ratings >= 0), True)
+
+    def test_pin_to_string(self):
+        """
+        Checks to make sure that correct string is returned
+        """
+        user = generate_user()
+        pin = generate_pin(user, title="test")
+        self.assertEqual(str(pin), "test")
+
+
+class UserProfileMethodTests(TestCase):
+    def test_ensure_pins_delete_on_user_delete(self):
+        """
+        Checks to make sure that the number of ratings for a Pin is non-zero.
+        """
+        user = generate_user()
+        pin1 = generate_pin(user, title="test1")
+        pin2 = generate_pin(user, title="test2")
+        pin3 = generate_pin(user, title="test3")
+        user.delete()
+
+        pins = Pin.objects.filter(user=user)
+        self.assertEqual(pins.count(), 0)
+
+    def test_user_profile_to_string(self):
+        """
+        Checks to make sure that correct string is returned
+        """
+        user = generate_user(username="tester")
+        
+        self.assertEqual(str(user), "tester")
+
+
+class FavouritePlaceMethodTests(TestCase):
+    def test_favourite_place_to_string(self):
+        """
+        Checks to make sure that correct string is returned
+        """
+        user = generate_user()
+        place = generate_favourite_place(user, place_name="test")
+
+        self.assertEqual(str(place), "test")
+
+
 class MapTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -267,6 +319,7 @@ class MapTests(StaticLiveServerTestCase):
         except:
             assert False
 
+
 class SignUpTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -329,7 +382,6 @@ class SignUpTests(StaticLiveServerTestCase):
         self.assertNotEqual(text_found, None)
 
 
-
 class SignInTests(StaticLiveServerTestCase):
     def setUp(self):
         User.objects.create_superuser(username='admin',
@@ -381,32 +433,6 @@ class SignInTests(StaticLiveServerTestCase):
         url = self.driver.current_url
         my_account_url = '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:myaccount"))
         self.assertEquals(url, my_account_url)
-
-
-class PinMethodTests(TestCase):
-    def test_ensure_num_ratings_are_positive(self):
-        """
-        Checks to make sure that the number of ratings for a Pin is non-zero.
-        """
-        user = generate_user()
-        pin = generate_pin(user, num_ratings=-1)
-        self.assertEqual((pin.num_ratings >= 0), True)
-
-class UserProfileMethodTests(TestCase):
-    def test_ensure_pins_delete_on_user_delete(self):
-        """
-        Checks to make sure that the number of ratings for a Pin is non-zero.
-        """
-        user = generate_user()
-        pin1 = generate_pin(user, title="test1")
-        pin2 = generate_pin(user, title="test2")
-        pin3 = generate_pin(user, title="test3")
-        user.delete()
-
-        pins = Pin.objects.filter(user=user)
-        self.assertEqual(pins.count(), 0)
-
-        #self.assertEqual((pin.num_ratings >= 0), True)
 
 
 class AboutViewTests(TestCase):
@@ -505,7 +531,10 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
             assert True
 
     def test_change_user_account_details(self):
-
+        """
+        Tests that when a user changes details on site the
+        changes are reflected in the database
+        """
 
         # Open signup page
         self.driver.get(
@@ -540,6 +569,9 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
 
 
 def generate_date():
+    """
+    Helper method to generate date
+    """
     return datetime.datetime(year=random.randint(2010, 2020),
                              month=random.randint(1,12),
                              day=random.randint(1,28),
@@ -548,14 +580,28 @@ def generate_date():
                              tzinfo=pytz.UTC)
 
 def generate_user(username="test", email="test@test.com", password="xxx"):
+    """
+    Helper method to generate user profile
+    """
     t = User.objects.get_or_create(username=username,email=email,password=password)[0]
     s = UserProfile.objects.get_or_create(user=t)[0]
     s.save()
     return s
 
 def generate_pin(user, num_ratings=0, rating=0, date=generate_date(), x_val=0, y_val=0, title="", content=""):
+    """
+    Helper method to generate pins
+    """
     pin = Pin(user=user, num_ratings = num_ratings, rating = rating, date=date, x_val=x_val, y_val=y_val)
     pin.title = title
     pin.content = content
     pin.save()
     return pin
+
+def generate_favourite_place(user, place_name="none", x_val=0, y_val=0):
+    """
+    Helper method to generate favourite place
+    """
+    p = FavouritePlace(user=user, place_name=place_name, x_val=x_val, y_val=y_val)
+    p.save()
+    return p
