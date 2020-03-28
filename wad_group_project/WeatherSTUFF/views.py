@@ -10,7 +10,7 @@ import datetime
 from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 
 #imports for user authentication
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm, UserEditForm, ProfileEditForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.models import is_superuser
@@ -107,19 +107,15 @@ def change_details(request):
 	userProf = UserProfile.objects.filter(user__exact=request.user).first()
 	if request.method=='POST':
 
-		user_form = UserEditForm(request.POST, instance=request.user)
-		profile_form = ProfileEditForm(request.POST, instance=userProf)
+		profile_form = UserProfileForm(request.POST, instance=userProf)
 
-
-		if user_form.is_valid() and profile_form.is_valid():
-			user_form.save()
+		if profile_form.is_valid():
 			profile_form.save()
 				
 		return redirect(reverse('WeatherSTUFF:myaccount'))
 	else:
-		user_form = UserEditForm(request.POST, instance=request.user)
-		profile_form = ProfileEditForm(request.POST, instance=userProf)
-	context_dict = {'user_form':user_form, 'profile_form':profile_form}
+		profile_form = UserProfileForm(request.POST, instance=userProf)
+	context_dict = {'profile_form':profile_form, 'userProf':userProf}
 	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
 
 

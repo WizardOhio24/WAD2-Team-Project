@@ -19,8 +19,6 @@ body{
 }
 
 
-
-
 /*nav bar styling*/
 
 #navigationBar{
@@ -146,7 +144,7 @@ body{
     left:17%;
     padding: 20px 40px;
     font-size:80%;
-    height:40%;
+    height:35%;
     
 }
 
@@ -164,9 +162,9 @@ body{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
     float:none;
     position:absolute;
-    left:25%;
-    height:20%;
-    width:50%;
+    left:34%;
+    height:auto;
+    width:30%;
     font-size: 100%;
 }
 
@@ -250,7 +248,7 @@ body{
 }
 
 #changeForm{
-    left:35.5%;
+    left:29%;
 }
 
 

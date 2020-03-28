@@ -19,17 +19,7 @@ class DeleteProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ()
-
-class UserEditForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('username', 'password',)
-
-class ProfileEditForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        exclude = ('user',)
-
+        
 class DeletePinForm(forms.ModelForm):
     class Meta:
         model = Pin

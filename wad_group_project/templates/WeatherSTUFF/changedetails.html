@@ -10,14 +10,16 @@
    <div class="userDetails">
         {{ user.username }}
    </div>
-
+   {% if userProf.profile_picture %}
+   <img src="{{ userProf.profile_picture.url }}" width=10%/>
+   {% endif %}
    <h1 class="pageTitle" id="userAuthenticationTitle">Change details</h1>
 
    <form id="changeForm" class="user_form" method = "post">
 
     {% csrf_token %}
     <!-- Display each form -->
-    {{ user_form.as_p }}
+    
     {{ profile_form.as_p }}
 
     <!-- Provide a button to click the submit the form. -->
