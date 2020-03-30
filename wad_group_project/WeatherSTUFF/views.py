@@ -105,14 +105,15 @@ def my_account(request):
 @login_required
 def change_details(request):
 	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
+
+	#get the forms
+	user_form = UserForm(request.POST, instance=request.user)
+	profile_form = UserProfileForm(request.POST, instance=user_prof)
+
 	if request.method == 'POST':
-	
 		user_prof.delete()
 		request.user.delete()
 
-		#get the forms
-		user_form = UserForm(request.POST, instance=request.user)
-		profile_form = UserProfileForm(request.POST, instance=user_prof)
 
 		#get the data input into the forms and save the details in a new object in the models
 		if user_form.is_valid() and profile_form.is_valid():
