@@ -15,7 +15,8 @@
    {% endif %}
    <h1 class="pageTitle" id="userAuthenticationTitle">Change details</h1>
 
-   <form id="changeForm" class="user_form" method = "post">
+   <form id="changeForm" class="user_form" method = "post" action = "{% url 'WeatherSTUFF:changedetails' %}"
+   enctype = "multipart/form-data">
 
     {% csrf_token %}
     <!-- Display each form -->
