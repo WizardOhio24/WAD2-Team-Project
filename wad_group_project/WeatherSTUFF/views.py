@@ -106,14 +106,10 @@ def my_account(request):
 def change_details(request):
 	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
 	if request.method == 'POST':
-	
-		user_prof.delete()
-		request.user.delete()
-
 		#get the forms
 		user_form = UserForm(request.POST, instance=request.user)
 		profile_form = UserProfileForm(request.POST, instance=user_prof)
-
+		
 		#get the data input into the forms and save the details in a new object in the models
 		if user_form.is_valid() and profile_form.is_valid():
 			user = user_form.save()
@@ -124,6 +120,7 @@ def change_details(request):
 			profile.user = user
 			
 			if 'profile_picture' in request.FILES:
+			
 				profile.profile_picture = request.FILES['profile_picture']
 			profile.save()
 
@@ -136,9 +133,6 @@ def change_details(request):
 		profile_form = UserProfileForm(instance=user_prof)
 
 	return render(request, 'WeatherSTUFF/changedetails.html', context = {'user_form':user_form, 'profile_form': profile_form})
-
-
-
 
 
 #delete the user account
