@@ -18,7 +18,9 @@ class UserProfile(models.Model):
         return self.user.username
 
 class FavouritePlace(models.Model):
-    place_name = models.CharField(max_length=200, unique=True)
+    PLACE_NAME_MAX_LENGTH = 200
+
+    place_name = models.CharField(max_length=PLACE_NAME_MAX_LENGTH, unique=True)
     x_val = models.FloatField()
     y_val = models.FloatField()
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -35,7 +37,6 @@ class Pin(models.Model):
     TITLE_MAX_LENGTH = 128
     CONTENT_MAX_LENGTH = 200
 
-    # Currently set to delete pins if user deletes profile, maybe change to "deleted account"
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     date = models.DateTimeField()
     rating = models.IntegerField(default=0)
