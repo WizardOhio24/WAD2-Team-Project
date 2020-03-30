@@ -765,8 +765,7 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "id_password").clear()
         self.driver.find_element(By.ID, "id_password").send_keys("newtest")
         self.driver.find_element(By.ID, "updateButton").click()
-
-        print(User.objects.all())
+        
         # Check that username has changed sucessfully
         try:
             user = User.objects.get(username="newtest")
