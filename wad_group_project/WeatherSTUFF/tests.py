@@ -20,7 +20,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
-from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, UserEditForm, DeletePinForm, FavPlaceForm, ProfileEditForm
+from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm, ProfileEditForm
 from populate import populate
 
 
@@ -263,14 +263,6 @@ class FormTests(TestCase):
         """
         form_data = {'profile_picture': None}
         form = UserProfileForm(form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_user_edit_form(self):
-        """
-        Tests user edit form is valid
-        """
-        form_data = {'username': 'test', 'password': 'test'}
-        form = UserEditForm(form_data)
         self.assertTrue(form.is_valid())
     
     def test_user_delete_form(self):
