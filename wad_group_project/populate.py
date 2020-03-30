@@ -1,8 +1,13 @@
 import datetime
 import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'wad_group_project.settings')
 import random
 
 import django
+django.setup()
+
 import pytz
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -10,10 +15,8 @@ from django.utils import timezone
 
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                      'wad_group_project.settings')
 
-django.setup()
+
 
 
 DUMMY_PASSWORD = "XXX"
