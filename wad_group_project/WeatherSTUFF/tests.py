@@ -759,11 +759,14 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
 
         # Go through steps of changing details
         self.driver.find_element(By.LINK_TEXT, "My Account").click()
-        self.driver.find_element(By.LINK_TEXT, "Change Account").click()
+        self.driver.find_element(By.LINK_TEXT, "Change Details").click()
+        self.driver.find_element(By.ID, "id_username").clear()
         self.driver.find_element(By.ID, "id_username").send_keys("newtest")
+        self.driver.find_element(By.ID, "id_password").clear()
         self.driver.find_element(By.ID, "id_password").send_keys("newtest")
         self.driver.find_element(By.ID, "updateButton").click()
 
+        print(User.objects.all())
         # Check that username has changed sucessfully
         try:
             user = User.objects.get(username="newtest")
