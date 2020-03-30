@@ -104,19 +104,41 @@ def my_account(request):
 # Edit an existing account
 @login_required
 def change_details(request):
-	userProf = UserProfile.objects.filter(user__exact=request.user).first()
-	if request.method=='POST':
+	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
+	if request.method == 'POST':
+	
+		user_prof.delete()
+		request.user.delete()
 
-		profile_form = UserProfileForm(request.POST, instance=userProf)
+		#get the forms
+		user_form = UserForm(request.POST, instance=request.user)
+		profile_form = UserProfileForm(request.POST, instance=user_prof)
 
-		if profile_form.is_valid():
-			profile_form.save()
-				
-		return redirect(reverse('WeatherSTUFF:myaccount'))
+		#get the data input into the forms and save the details in a new object in the models
+		if user_form.is_valid() and profile_form.is_valid():
+			user = user_form.save()
+			user.set_password(user.password)
+			user.save()
+
+			profile = profile_form.save(commit = False)
+			profile.user = user
+			
+			if 'profile_picture' in request.FILES:
+				profile.profile_picture = request.FILES['profile_picture']
+			profile.save()
+
+			login(request, user)
+			return redirect(reverse('WeatherSTUFF:myaccount'))
+		else:
+			print(user_form.errors, profile_form.errors)
 	else:
-		profile_form = UserProfileForm(request.POST, instance=userProf)
-	context_dict = {'profile_form':profile_form, 'userProf':userProf}
-	return render(request, 'WeatherSTUFF/changedetails.html', context=context_dict)
+		user_form = UserForm(instance=request.user)
+		profile_form = UserProfileForm(instance=user_prof)
+
+	return render(request, 'WeatherSTUFF/changedetails.html', context = {'user_form':user_form, 'profile_form': profile_form})
+
+
+
 
 
 #delete the user account
