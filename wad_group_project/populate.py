@@ -1,23 +1,22 @@
+import datetime
 import os
+import random
+
+import django
+import pytz
+from django.contrib.auth.models import User
+from django.db import IntegrityError
+from django.utils import timezone
+
+from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'wad_group_project.settings')
 
-import django
 django.setup()
 
-import datetime
-from django.utils import timezone
-import pytz
-from WeatherSTUFF.models import UserProfile, Pin, FavouritePlace
-from django.contrib.auth.models import User
-import random
-from django.db import IntegrityError
 
 DUMMY_PASSWORD = "XXX"
-
-# AT THE MOMENT:
-# x_val = latitude
-# y_val = longitude
 
 def populate():
 
@@ -160,8 +159,8 @@ def populate():
              'mia': {'pins': user_D_pins, 'favourite_places': user_D_favourite_places,'f_name': 'Mia', 'l_name': 'Stevenson', 'email': 'mia@stevenson.co.uk'}
     }
 
-    # The code below goes through the users dictionary, then adds each category, 
-    # and then adds all the associated pages for that category.
+    # The code below goes through the users dictionary, then adds each pin to the corresponding user, 
+    # and then adds all the associated favourite places for that user.
 
     for user, user_data in users.items():
         u = add_user(user, user_data)
