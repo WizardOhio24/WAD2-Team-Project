@@ -103,14 +103,15 @@ def my_account(request):
 # Edit an existing account
 @login_required
 def change_details(request):
+	#get user profile of current user
 	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
 	
 	if request.method == 'POST':
-		#get the forms
+		#get the forms, passing in the user's data to populate them
 		user_form = UserForm(request.POST, instance=request.user)
 		profile_form = UserProfileForm(request.POST, instance=user_prof)
 		
-		#get the data input into the forms and save the details in a new object in the models
+		#get the data input into the forms and save the details in the object
 		if user_form.is_valid() and profile_form.is_valid():
 			user = user_form.save()
 			user.set_password(user.password)
