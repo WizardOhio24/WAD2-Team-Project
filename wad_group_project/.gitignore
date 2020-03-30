@@ -1,4 +1,6 @@
 # Standered python .gitignore, see https://github.com/github/gitignore/blob/master/Python.gitignore
+
+0001_initial.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
