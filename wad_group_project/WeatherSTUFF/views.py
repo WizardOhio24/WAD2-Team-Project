@@ -33,7 +33,6 @@ def about(request):
 def sign_up(request):
 
 	registered = False
-
 	if request.method == 'POST':
 		#get the forms
 		user_form = UserForm(request.POST)
@@ -105,6 +104,7 @@ def my_account(request):
 @login_required
 def change_details(request):
 	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
+	
 	if request.method == 'POST':
 		#get the forms
 		user_form = UserForm(request.POST, instance=request.user)
@@ -117,10 +117,10 @@ def change_details(request):
 			user.save()
 
 			profile = profile_form.save(commit = False)
+			
 			profile.user = user
-			
+
 			if 'profile_picture' in request.FILES:
-			
 				profile.profile_picture = request.FILES['profile_picture']
 			profile.save()
 
