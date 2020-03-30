@@ -2,8 +2,6 @@
 console.log("Loaded mdfsdfsdfsap");
 document.addEventListener("DOMContentLoaded", initialize);
 
-//document.onload = initialize();
-
 function initialize() {
     console.log("Adding Pins");
     var mymap = L.map('mapContainer').setView([40, -97], 4);
@@ -42,17 +40,9 @@ function initialize() {
                 layer = e.layer;
 
                 layer.bindPopup('Hello world!', {editable: true, nametag: "Something tag", title: "Title"});
-            if (type === 'marker') {
-               // layer.bindPopup('Hello world!', {editable: true, nametag: "Something tag"});
-                // Do marker specific actions
-            }
             drawnItems.addLayer(layer);
-            // Save to the databse here
+            // Save to the databse
             savePinToDatabase(layer);
-
-            // Make a call to ajax to save and hightlight the
-            // pin in green then fade the green out (Using css) if the
-            // save opperation was successful.  Just an idea.
          });
 
          var fireStyle = {
@@ -117,47 +107,6 @@ function initialize() {
         "fillOpacity": 0.5
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    //////////////////// Overlay loading  ////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////
-/*
-    var geojsonLayer = new L.GeoJSON.AJAX("http://0.0.0.0:4000/ShapeFileToJSON.geojson", {style: style});
-    //geojsonLayer.addTo(mymap);
-
-    //var geojsonLayerE = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959Europe.geojson", {style: style});
-    //geojsonLayerE.addTo(mymap);
-
-    //var geojsonLayerAU = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959AUS.geojson", {style: style});
-    //geojsonLayerAU.addTo(mymap);
-
-    //var geojsonLayerME = new L.GeoJSON.AJAX("http://0.0.0.0:8000/gpm_3hr.20200221.235959ME.geojson", {style: style});
-    //geojsonLayerME.addTo(mymap);
-
-    var geojsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:4000/gpm_3hr.20200221.235959Globe.geojson", {style: style});
-*/
-    //These make the map run slow, they contain too much data
-    //var CurWarningjsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:8000/CurrentWarnings.geojson", {style: WarningStyle});
-
-    //var FireWarningjsonLayerGlobe = new L.GeoJSON.AJAX("http://0.0.0.0:8000/FireData.geojson", {style: WarningStyle});
-
-    // For the top right button, can add more here
-  /*  var overlayMaps = {
-        "America Rain": geojsonLayer,
-        "Global Rain":geojsonLayerGlobe,
-    }*/
-
-        //"Current Warnings":CurWarningjsonLayerGlobe
-        //"Fire Warnings": FireWarningjsonLayerGlobe
-            //"Europe Rain": geojsonLayerE,
-        //"Austrailian Rain": geojsonLayerAU,
-        //"Middle East Rain": geojsonLayerME,
-
-        // This adds the actual overlay top right button to the map
-        //L.control.layers(null, overlayMaps).addTo(mymap);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////
-
         csrftoken = getCookie('csrftoken');
         }
 
@@ -177,12 +126,11 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+/////////////////////////////////////////////////
 var csrftoken;
-// //////////////////////////////
 
 function savePinToDatabase(layer){
 
-//console.log(layer)
 console.log(layer['_popup'])
   $.ajax({
       type: 'POST',
@@ -194,17 +142,15 @@ console.log(layer['_popup'])
       data: {
                 "lat":layer['_latlng']['lat'],
                 "lng": layer['_latlng']['lng'],
-                "content": layer['_popup']['_content'] ,//"Hello",//layer, // Pin data
+                "content": layer['_popup']['_content'] ,
                 "title": layer['_popup']['options']['title'],
                 "date": '',//Date().toLocaleString(),
                 "csrfmiddlewaretoken": String(csrftoken)
              },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
 
-        //console.log(XMLHttpRequest);
         if(XMLHttpRequest.status == "401"){
           layer.remove();
-          //console.log(XMLHttpRequest)
           //User profile not authenticated
           alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
         }
@@ -221,14 +167,13 @@ function addPinsToMap(map){
 
   $.get("WeatherSTUFF/get_pins/", function(data, status){
     // loop through each pin and add each to the map
-    //console.log("Data: " + data + "\nStatus: " + status);
 
     for(m in data){
       var mf = data[m]["fields"];
 
       var myMarker =  L.marker( [mf["y_val"], mf["x_val"]] );
       console.log(mf['title']);
-      myMarker.bindPopup( mf["content"] , {editable: true, title:mf['title']} )//.addTo(map)
+      myMarker.bindPopup( mf["content"] , {editable: true, title:mf['title']} )
       prevPins.addLayer(myMarker);
     }
 });
