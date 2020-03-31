@@ -17,9 +17,9 @@ body{
     padding: 10%;
     height: 30vh;
     width: 80%;
-    margin-top: 10%;
-    position: absolute;
-    top:50%;
+    position:absolute;
+    top:35%;
+    
 }
 
 
@@ -157,10 +157,12 @@ body{
 .authenticationDiv{
     position: relative;
     right:3.5%;
+    
 }
 
 .authenticationDiv a{
     margin-top:1%;
+   
 }
 
 
