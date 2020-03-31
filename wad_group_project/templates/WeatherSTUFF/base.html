@@ -30,29 +30,27 @@
         <!-- nav bar will have option to log out if signed in
         if not signed in, you will have the option to sign in-->
 
-      
+        
 
-            {% if user.is_authenticated %}
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/" class="navButton">Home</a></li>
-                        <li><a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a></li>
-                        <li><a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a></li>
-                        <li><a href="{% url 'WeatherSTUFF:logout' %}" class="navButton">Logout</a></li>
-                      </ul>
-                </div>
-            </nav>
-            
-            
-            {% else %}
+        {% if user.is_authenticated %}
 
-            <div class="col-md-3"><a href="/" class="navButton">Home</a></div>
-            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a></div>
-            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:login' %}" class="navButton">Sign In</a></div>
-            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a></div>
+            <div class="row">
+                <a href="/" class="navButton">Home</a>
+                <a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a>
+                <a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a>
+                <a href="{% url 'WeatherSTUFF:logout' %}" class="navButton">Logout</a>
+            </div>  
+
+        {% else %}
+
+            <div class="row">
+                <a href="/" class="navButton">Home</a> 
+                <a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a>
+                <a href="{% url 'WeatherSTUFF:login' %}" class="navButton">Sign In</a>
+                <a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a>
+            </div>
             
-            {% endif %}
+        {% endif %}
                 
         
 

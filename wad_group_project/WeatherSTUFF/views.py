@@ -209,7 +209,7 @@ def show_fav_place(request, fav_place_slug):
 		diff_x = fav_place.x_val-pin.x_val
 		diff_y = fav_place.x_val-pin.x_val
 		distance = math.sqrt((diff_x**2)+(diff_y**2))
-		if distance<5:
+		if distance<10:
 			pins.append(pin)
 
 	#process the form to delete the favourite place
