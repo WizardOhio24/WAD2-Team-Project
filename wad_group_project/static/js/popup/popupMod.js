@@ -63,6 +63,8 @@ L.Popup.mergeOptions({
    removable: false,
    editable: false,
    title: "",
+   username: "",
+   date: ""
 })
 
 // Modifying the popup mechanics
@@ -82,8 +84,16 @@ L.Popup.include({
       if(this.options.title){
         console.log(this.options.title);
         // Add a title in bold at the top of the container
-        var title = this._title = L.DomUtil.create('b', prefix + '-content', wrapper); // Change this css to look better
+        var title = this._title = L.DomUtil.create('div', 'leaflet-popup-title-mod', wrapper); // Change this css to look better
         title.innerHTML = this.options.title;
+      }
+      if(this.options.username){
+        var username = this._title = L.DomUtil.create('i', 'leaflet-popup-username', wrapper);
+        username.innerHTML = this.options.username;
+      }
+      if(this.options.date){
+        var date = this._title = L.DomUtil.create('i', 'leaflet-popup-date', wrapper);
+        date.innerHTML = this.options.date;
       }
 
       this._contentNode = L.DomUtil.create('div', prefix + '-content', wrapper);

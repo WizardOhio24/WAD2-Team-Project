@@ -1,4 +1,3 @@
-console.log("Loaded mdfsdfsdfsap");
 document.addEventListener("DOMContentLoaded", initialize);
 
 function initialize() {
@@ -184,8 +183,8 @@ function addPinsToMap(map){
       var mf = data[m]["fields"];
 
       var myMarker =  L.marker( [mf["y_val"], mf["x_val"]] );
-      console.log(mf['title']);
-      myMarker.bindPopup( mf["content"] , {editable: true, removable: true, nametag: " ", title:mf['title']} )
+      console.log(mf);
+      myMarker.bindPopup( mf["content"] , {editable: true, removable: true, username: mf['user'],date: mf['date'], nametag: " ", title:mf['title']} )
       prevPins.addLayer(myMarker);
     }
 });

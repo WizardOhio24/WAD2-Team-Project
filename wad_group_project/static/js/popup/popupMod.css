@@ -1,4 +1,4 @@
- 
+
 .leaflet-popup-useraction-buttons,
 .leaflet-popup-input-actions{
    display: flex;
@@ -44,4 +44,28 @@ a.leaflet-popup-input-save:hover{
    visibility: hidden;
    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
    background-color: lightgrey;
+}
+
+.leaflet-popup-title-mod{
+  display: block;
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 6px 0px 0px 20px;
+  /*padding: 3px 0px 0px 10px;*/
+}
+
+.leaflet-popup-username{
+  display: inline;
+  font-weight: lighter;
+  font-size: 9pt;
+  margin: 6px 0px 0px 20px;
+
+}
+
+.leaflet-popup-date{
+  display: inline;
+  font-weight: lighter;
+  font-size: 9pt;
+  margin: 6px 0px 0px 20px;
+
 }

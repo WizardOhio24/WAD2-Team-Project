@@ -11,7 +11,7 @@ from WeatherSTUFF.models import Pin, UserProfile, FavouritePlace
 
 #imports for user authentication
 from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User#, DateTimeField
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.models import is_superuser
 from django.contrib.auth.decorators import login_required
@@ -286,10 +286,10 @@ def add_pin(request):
         if(obj.title == "DELETED" and obj.content == "DELETED"):
             obj.delete()
             return HttpResponse(status=200, content = "")
-        print("Edited")
+        #print("Edited")
 
-        print(created)
-        print(obj)
+        #print(created)
+        #print(obj)
         #p = Pin(  \
         #user = userProf, \
         #date = datenow, \
@@ -306,5 +306,16 @@ def get_pins(request):
     # Don't bother checking for anything, just
     # return a json of all the get_pins
 
-    pin_data = serializers.serialize('json', Pin.objects.all())
+    pin_data = serializers.serialize('json', Pin.objects.all(), use_natural_foreign_keys=True, use_natural_primary_keys=True, cls=LazyEncoder)
+    #print(pin_data)
     return HttpResponse(pin_data, content_type='application/json')
+
+# For the username rather than number
+from django.core.serializers.json import DjangoJSONEncoder
+
+class LazyEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        print(obj.__str__())
+        if isinstance(obj, datetime.datetime):
+            return str(str(obj.date().day) +"/"+ str(obj.date().month) +"/"+ str(obj.date().year))
+        return super().default(obj)

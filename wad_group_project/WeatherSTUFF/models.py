@@ -1,22 +1,37 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, BaseUserManager
 from django.template.defaultfilters import slugify
 from django.db.models.signals import pre_save, post_save
 import re
 import random
 
+class UserProfileManager(models.Manager):
+    def get_by_natural_key(self, user):
+        return self.get(user=user)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
- 
+
+    objects = UserProfileManager()
+
     def save(self, *args, **kwargs):
         super(UserProfile, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'UserProfiles'
+        unique_together = [['user']]
 
     def __str__(self):
+        print("Username:" + self.user.username)
         return self.user.username
+
+    def natural_key(self):
+        return (self.user.username)
+
+#    def value_to_string(self, obj):
+#        value = self.value_from_object(obj)
+#        return self.get_prep_value(value)
 
 class FavouritePlace(models.Model):
     PLACE_NAME_MAX_LENGTH = 200
@@ -62,3 +77,5 @@ class Pin(models.Model):
     def __str__(self):
         return self.title
 
+    #def natural_key(self):
+    #    return self.user.username
