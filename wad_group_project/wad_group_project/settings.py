@@ -31,7 +31,8 @@ SECRET_KEY = '!rcw887i(6_07gqdl6^*&b0z$=un!8gwq$8pqyn#5w@q5*w%$0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['weatherstuff.pythonanywhere.com']
+ALLOWED_HOSTS = ['weatherstuff.pythonanywhere.com',
+                 '127.0.0.1']
 
 # Login (Mia, need to check this)
 LOGIN_URL = 'WeatherSTUFF:login'
