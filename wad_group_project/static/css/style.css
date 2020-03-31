@@ -18,7 +18,8 @@ body{
     height: 30vh;
     width: 80%;
     margin-top: 10%;
-    position:relative;
+    position: absolute;
+    top:50%;
 }
 
 
