@@ -13,8 +13,8 @@
 
 		<!-- if not logged in, give option to sign in or sign up -->
 		<div class="authenticationDiv">
-			<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox">Sign In</a>
-			<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox">Sign Up</a>
+			<a href="{% url 'WeatherSTUFF:login' %}" class="buttonBox" id="accountButton">Sign In</a>
+			<a href="{% url 'WeatherSTUFF:register' %}" class="buttonBox" id="accountButton">Sign Up</a>
 		</div>
 
 	{% endif %}
