@@ -8,64 +8,94 @@
 {% block body_block %}
 
     
-    {% if user.is_authenticated %} 
-
-        <h1 class="pageTitle" id="myAccount">{{ user.username }}</h1>
-
-        {% if userProf.profile_picture %}
-        <img src="{{ userProf.profile_picture.url }}" width=10%/>
-        {% endif %}
-
-
-        <!-- give the logged in user the option to either edit or delete their account-->
-        <div class="authenticationDiv">
-            <a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="accountButton">Delete Account</a>
-            <a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="accountButton">Change Details</a>
-        </div>
+    {% if user.is_authenticated %}
         
-        <!-- show the user's favourite places
+        <div class="row">
+            <div class="col-md-6">
+                <p class="pageTitle">{{ user.username }}  
+                    {% if userProf.profile_picture %}
+                    <img src="{{ userProf.profile_picture.url }}" width=10%/>
+                    {% endif %}</p>
+            </div>
+    
+            <!-- give the logged in user the option to either edit or delete their account-->
+            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:deleteaccount' %}" class = 'buttonBox' id="accountButton">Delete Account</a></div>
+                
+            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:changedetails' %}" class = 'buttonBox' id="accountButton">Change Details</a></div>
+    
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1">
+            <!-- show the user's favourite places
              each favourite place is a link to provide more details about it -->
-        <div class="containerClass" id="favouritePlaces">
-            My Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
-            <div class="listDiv">
-                <ul>
-                    {% for fav_place in fav_places %}
-                        <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}">{{ fav_place.place_name }}</a></li>
-                        <br />
-                    {% endfor %}
-                </ul>
-       
+             <div class="containerClass">
+                My Favourite Places <a href="{% url 'WeatherSTUFF:add_fav' %}" id="addButton">+</a>
+                <div class="listDiv">
+                    <ul>
+                        {% for fav_place in fav_places %}
+                            <li><a href="{% url 'WeatherSTUFF:show_fav_place' fav_place.slug %}">{{ fav_place.place_name }}</a></li>
+                            <br />
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-        </div>
+            </div>
 
-        <!-- display the list of pins which the user has placed 
+            <div class="col-md-4 col-md-offset-1">
+            <!-- display the list of pins which the user has placed 
              each list item is a link to provide more details about the pin or possibly delete it -->
-        <div class="containerClass" id="pins">
-            My Pins
-            <div class="listDiv">
-                <ul>
-                {% for pin in pins %}
-                    
-                    <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}">{{ pin.title }}</a></li>
-                    <li>{{ pin.content }}</li>
-                    <br />
-                    
-                {% endfor %}
-
-                </ul>
+             <div class="containerClass">
+                My Pins
+                <div class="listDiv">
+                    <ul>
+                    {% for pin in pins %}
+                        
+                        <li><a href="{% url 'WeatherSTUFF:show_pin' pin.slug %}">{{ pin.title }}</a></li>
+                        <li>{{ pin.content }}</li>
+                        <br />
+                        
+                    {% endfor %}
+    
+                    </ul>
+                </div>
             </div>
         </div>
+
+    </div>
+
 
     {% else %}
 
     <!-- if the user isn't logged in, give them the option to sign in or create an account -->
     <div class="description">
-        Have an account? Login here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
-   </br>
-        Create an Account here <a class="buttonBox" id="smallLink" href = "{% url 'WeatherSTUFF:register' %}">Sign Up</a>
-     
+        <div class="row">
+            <div class="col-md-12">
+                Have an account? Login here 
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <a class="buttonBox" id="smallButton" href = "{% url 'WeatherSTUFF:login' %}">Sign In</a> or
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-12">
+                Create an Account here 
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <a class="buttonBox" id="smallButton"  href = "{% url 'WeatherSTUFF:register' %}">Sign Up</a>
+            </div>
+        </div>
+
     </div>
-    {% endif %} <br />
+    
+    {% endif %}
    
 {% endblock %}
 

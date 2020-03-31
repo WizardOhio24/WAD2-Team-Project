@@ -8,21 +8,50 @@
 
     {% if message %}
         <!-- if the message was passed in from the view, then the user has just deleted account -->
-        <strong class="description" id="message">{{ message }}</strong>
-        <a href = "/" class="buttonBox" id="returnDeleteButton">Return to the homepage</a></br />
+      
+        <div class="return">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <strong id="message">{{ message }}</strong>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <a href = "/" class="buttonBox">Return to the homepage</a></br />
+                </div>
+            </div>
+        </div>
 
     {% else %}
 
         <!-- if not, display the form allowing the user to delete their account-->
-        <div class="userDetails">
-            {{ user.username }}
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5">
+                <p class="pageTitle" id="userAuthTitle">{{ user.username }}</p>
+            </div>
         </div>
 
-        <div class="description" id="deleteDiv">
-            <form method = "post">
-                {% csrf_token %}
-		        Press here to permanently delete your account
-		        <button class = 'buttonBox' id="deleteButton">Delete</a>
+        <div class="return">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <strong id="message">Press here to permanently delete your account</strong>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <form method = "post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class='buttonBox' id="deleteButton">Delete</button>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </div>
+            </div>           
         </div>
         
     {% endif %}

@@ -5,32 +5,48 @@
 {% endblock %}
 
 {% block body_block %}
+<div class="row">
+    <div class="col-md-6">
+        <p class="pageTitle">{{ fav_place.place_name }}</p>
+    </div>
 
-<h1 class="pageTitle">{{ fav_place.place_name }}</h1>
-
-<!-- display the form to delete your favourite place -->
-<div class="description" id="deleteFavPlace">
-    <form method = "post">
-        {% csrf_token %}
-        Press here to delete your favourite place
-        <button class = 'buttonBox' id="deletePlaceButton">Delete</a>
+    <div class="col-md-6">
+    <!-- display the form to delete your favourite place -->
+    <div class="description" id="centredText">
+        <form method = "post">
+            {% csrf_token %}
+            Press here to delete your favourite place
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <button class = 'buttonBox' id="formButton">Delete</a>
+                </div>
+            </div>   
+    </div>
+    </div>
 </div>
 
-<!-- display the list of pins which are close to your favourite location -->
-<div class="containerClass" id="closePins">
-    <strong>Events near here</strong>
-    <div id="listDiv">
-        <ul>
-        {% for pin in pins %}
-            
-            <li>{{ pin.title }}</li>
-            <li>{{ pin.content }}</li>
-            <br />
-            
-        {% endfor %}
+<div class="row">
 
-        </ul>
+    <div class="col-md-4 col-md-offset-4">
+        <!-- display the list of pins which are close to your favourite location -->
+        <div class="containerClass">
+            Events near here
+            <div id="listDiv">
+                <ul>
+                {% for pin in pins %}
+                    
+                    <li>{{ pin.title }}</li>
+                    <li>{{ pin.content }}</li>
+                    <br />
+                    
+                {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+
     </div>
+
 </div>
 
 {% endblock %}

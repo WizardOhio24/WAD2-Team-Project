@@ -11,6 +11,8 @@
 
                {% endblock %}
         </title>
+
+        <!-- necessary bootstrap statements -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" 
         integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" 
@@ -35,20 +37,23 @@
             <div class="col-md-3"><a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a></div>
             <div class="col-md-3"><a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a></div>
             <div class="col-md-3"><a href="{% url 'WeatherSTUFF:logout' %}" class="navButton">Logout</a></div>
-   
+            
             {% else %}
+
             <div class="col-md-3"><a href="/" class="navButton">Home</a></div>
             <div class="col-md-3"><a href="{% url 'WeatherSTUFF:about' %}" class="navButton">About</a></div>
-            <div class="col-md-3"> <a href="{% url 'WeatherSTUFF:login' %}" class="navButton">Sign In</a></div>
-            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a></div>   
+            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:login' %}" class="navButton">Sign In</a></div>
+            <div class="col-md-3"><a href="{% url 'WeatherSTUFF:myaccount' %}" class="navButton">My Account</a></div>
             
             {% endif %}
-    
-            </div>
+                
+        </div>
 
         <div>
+
             {% block body_block %}
             {% endblock %}
+            
         </div>
 
     </body>

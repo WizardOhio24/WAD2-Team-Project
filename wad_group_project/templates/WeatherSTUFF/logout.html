@@ -1,7 +1,5 @@
 {% extends 'WeatherSTUFF/base.html' %}
 
-
-
 {% block title_block %}
     Logged Out
 {% endblock %}
@@ -9,7 +7,19 @@
 {% block body_block %}
 
         <!-- display the message that the user has logged out and provide a link to the home page -->
-        <strong class="description" id="logoutMessage">You have been successfully logged out</strong>
-        <a href = "/" class="buttonBox" id="returnButton">Return to the homepage</a></br />
+
+        <div class="return">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <strong id="message">You have been successfully logged out</strong>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <a href = "/" class="buttonBox">Return to the homepage</a></br />
+                </div>
+            </div>
+        </div>
     
 {% endblock %}

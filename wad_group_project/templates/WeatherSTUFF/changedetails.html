@@ -7,27 +7,36 @@
 
 {% block body_block %}  
 
-   <div class="userDetails">
-        {{ user.username }}
-   </div>
-   {% if userProf.profile_picture %}
-   <img src="{{ userProf.profile_picture.url }}" width=10%/>
-   {% endif %}
-   <h1 class="pageTitle" id="userAuthenticationTitle">Change details</h1>
-
-   <form id="changeForm" class="user_form" method = "post" action = "{% url 'WeatherSTUFF:changedetails' %}"
-   enctype = "multipart/form-data">
-
-    {% csrf_token %}
-    <!-- Display each form -->
+    <div class="row">
+        <div class="col-md-2 col-md-offset-5">
+            <p class="pageTitle" id="userAuthTitle">{{ user.username }}</p>
+        </div>
+    </div>
     
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
+<div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <!-- display the form to change details for WeatherSTUFF -->
+            <form class="form" method = "post" action = "{% url 'WeatherSTUFF:changedetails' %}"
+            enctype = "multipart/form-data">
+         
+             {% csrf_token %}
+             <!-- Display each form -->
+             
+             {{ user_form.as_p }}
+             {{ profile_form.as_p }}
+             
+             <!-- Provide a button to click the submit the form. -->
+             <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <button type="submit" class="buttonBox" id="formButton" >Update</button>
+                </div>
+            </div>
+             
+            </form>
+        </div>
     
-
-    <!-- Provide a button to click the submit the form. -->
-    <button type="submit" class="buttonBox" id="updateButton">Update</button>
-    </form>
+</div>
+  
 {% endblock %}
 
 

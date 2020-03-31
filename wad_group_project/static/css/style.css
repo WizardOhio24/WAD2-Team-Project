@@ -1,3 +1,100 @@
+/*map styling*/
+#mapContainer{
+    padding: 10%;
+    height: 60vh;
+    width: 80%;
+    margin-left:10%;
+    margin-top:5%;    
+}
+
+
+/*buttons*/
+
+.navButton{
+    background-color: #81A1C1;
+    display: block;
+    color: white;
+    text-align: center;
+    width:100%;
+    text-decoration: none;
+    font-size:250%;
+    margin-right:0px;
+
+}
+
+.navButton:hover,current{
+    background-color: #BF616A;
+}
+
+.current{
+    background-color: #BF616A;  
+}
+
+.buttonBox{
+    color:white;
+    border-color: #2E3440;
+    border-style: solid;
+    display: block;
+    background-color: #81A1C1;
+    text-align:center;
+    text-decoration:none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+    padding: 4% 4%;
+}
+
+#accountButton{
+    font-size:150%;
+    margin-top:8%;
+}
+
+#formButton{
+    width:100%;
+    margin-top:3%;
+    margin-bottom:3%;
+}
+
+#deleteButton{
+    width:100%;
+}
+
+#smallButton{
+    width:20%;
+    padding:1% 1%;
+}
+
+
+
+/* general styling */
+.pageTitle {
+    border-style: solid;
+    border-color: #2E3440;
+    display: block;
+    color: #81A1C1;
+    text-align: left;
+    text-decoration:none;
+    font-size:200%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+    padding: 2% 2%;
+    margin-top:3%;
+    margin-left:3%;
+}
+
+.description{
+    text-align:justify;
+    font-size:150%;
+    margin-top:5%;
+    margin-left:5%;
+    margin-right:5%;
+}
+
+#centredText{
+    text-align:center;
+}
+
+#rightText{
+    text-align:right;
+}
+
 .bg{
     background-color: #4C566A;
     height:100%;
@@ -10,14 +107,77 @@
     
 }
 
-/*map styling*/
-#mapContainer{
-    padding: 10%;
-    height: 30vh;
-    width: 80%;
-    position:absolute;
-    top:35%;
+#userAuthTitle{
+    margin-top:30%;
+    text-align:center;
+}
+
+.textBox{
+    font-size:65%;
+    margin-top:3%;
+    margin-bottom: 3%;
+}
+
+.return{
+    text-align:center;
+    margin-top:10%;
+    
+    font-size:150%;
+    width:100%;
+}
+
+
+/*divs*/
+.form{
+    background-color:rgb(62, 70, 87);
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    padding: 5% 5%;
+    margin-top:10%;
+    margin-bottom:10%;
+    font-size: 150%;
+    color:#81A1C1;
+    text-align:left;      
+}
+
+
+/*favourite places*/
+.containerClass{
+    background-color:rgb(62, 70, 87);
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    font-size:150%;
+    text-align:center;
+    width:100%;
+    height:auto;
+    margin-top:10%;
+       
+}
+
+.listDiv{
+    
+    border-style:solid;
+    border-color:rgb(43, 48, 59);
+    font-size:100%;
+    text-align:left;
+    width:80%;
+    height:auto;
+    margin-top:5%;
+    margin-bottom:5%;
+    margin-left:10%;
+    margin-right:10%;
+}
+
+ul{
+    list-style-type: none;
     
 }
 
+.listDiv ul li a{
+
+    font-size:100%;
+    text-decoration: none;
+    color:white;
+    
+}
 
