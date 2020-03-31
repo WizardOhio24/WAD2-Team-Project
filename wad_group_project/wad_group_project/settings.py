@@ -31,7 +31,7 @@ SECRET_KEY = '!rcw887i(6_07gqdl6^*&b0z$=un!8gwq$8pqyn#5w@q5*w%$0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['weatherstuff.pythonanywhere.com']
 
 # Login (Mia, need to check this)
 LOGIN_URL = 'WeatherSTUFF:login'
@@ -142,3 +142,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # adding MEDIA_DIR
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+
