@@ -15,12 +15,12 @@ function savePinUpdateToDatabase(layer){
       request.setRequestHeader("X-CSRFToken", csrftoken);
       },
       url: 'WeatherSTUFF/add_pin/', // this is the view that handles the post data
-      dataType: 'json',
+      //dataType: 'json',
       data: {
                 'lat':layer['_latlng']['lat'],
                 'lng': layer['_latlng']['lng'],
                 'content': layer['_popup']['_content'] ,
-                'title': layer['_popup']['_titleField']['innerText'],
+                'title': layer['_popup']['_title']['innerText'],
                 'date': '',//Date().toLocaleString(),
                 'csrfmiddlewaretoken': String(csrftoken),
              },
@@ -28,17 +28,23 @@ function savePinUpdateToDatabase(layer){
         if(XMLHttpRequest.status == "401"){
           //User profile not authenticated
           // The changes didn't work so revert
+
           layer['_popup']['_content'] = layer['_popup']['_prevContent'];
           console.log(layer['_popup']['_prevTitle']);
           layer['_popup']['_title']['innerText'] = layer['_popup']['_prevTitle'];
           layer['_popup'].update();
+
           alert("Error "+XMLHttpRequest.status+" : "+XMLHttpRequest.responseText);
+          //return false;
+
         }
-
-
-
+        console.log("Error:" + textStatus);
       },
-      //success: return true,
+      success:function(data){
+        if(layer['_popup']['_content'] == "DELETED" && layer['_popup']['_title']['innerText'] == "DELETED"){
+          layer.remove()
+        }
+      },
   });
 }
 // ----
@@ -134,7 +140,16 @@ L.Popup.include({
    },
 
    _onRemoveButtonClick: function (e) {
-      this._source.remove();
+
+     this._prevContent = this.getContent();
+     this._prevTitle = this._title.innerText;
+
+     this.setContent("DELETED");
+     this._title.innerText = "DELETED" ;
+      savePinUpdateToDatabase(this._source)
+
+        //this._source.remove();
+
       L.DomEvent.stop(e);
    },
 
@@ -247,7 +262,9 @@ L.Popup.include({
 
       console.log(this._source)
 
-      savePinUpdateToDatabase(this._source);
+      if(!savePinUpdateToDatabase(this._source)){
+
+    }
 
 
    }

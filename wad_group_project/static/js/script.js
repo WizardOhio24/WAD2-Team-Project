@@ -1,4 +1,3 @@
-//document.addEventListener("load", function(){initialize()});
 console.log("Loaded mdfsdfsdfsap");
 document.addEventListener("DOMContentLoaded", initialize);
 
@@ -30,7 +29,9 @@ function initialize() {
              polyline: false
            },
              edit: {
-                 featureGroup: drawnItems
+                 featureGroup: drawnItems,
+                 remove: false,
+                 edit: false
              }
          });
          mymap.addControl(drawControl);
@@ -39,8 +40,19 @@ function initialize() {
             var type = e.layerType,
                 layer = e.layer;
 
-                layer.bindPopup('Hello world!', {editable: true, nametag: "Something tag", title: "Title"});
+                layer.bindPopup('Content', {editable: true, removable: true, nametag: " ", title: "Title"});
             drawnItems.addLayer(layer);
+            // Save to the databse
+            savePinToDatabase(layer);
+         });
+
+         mymap.on(L.Draw.Event.DELETED, function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+
+            layer.bindPopup('DELETED', {editable: true, nametag: "Something tag", title: "DELETED"});
+            print("SOMEtHING")
+            //drawnItems.addLayer(layer);
             // Save to the databse
             savePinToDatabase(layer);
          });
@@ -173,7 +185,7 @@ function addPinsToMap(map){
 
       var myMarker =  L.marker( [mf["y_val"], mf["x_val"]] );
       console.log(mf['title']);
-      myMarker.bindPopup( mf["content"] , {editable: true, title:mf['title']} )
+      myMarker.bindPopup( mf["content"] , {editable: true, removable: true, nametag: " ", title:mf['title']} )
       prevPins.addLayer(myMarker);
     }
 });

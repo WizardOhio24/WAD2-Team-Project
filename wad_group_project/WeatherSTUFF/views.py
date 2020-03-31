@@ -46,7 +46,7 @@ def sign_up(request):
 
 			profile = profile_form.save(commit = False)
 			profile.user = user
-			
+
 			if 'profile_picture' in request.FILES:
 				profile.profile_picture = request.FILES['profile_picture']
 			profile.save()
@@ -105,12 +105,12 @@ def my_account(request):
 def change_details(request):
 	#get user profile of current user
 	user_prof = UserProfile.objects.filter(user__exact=request.user).first()
-	
+
 	if request.method == 'POST':
 		#get the forms, passing in the user's data to populate them
 		user_form = UserForm(request.POST, instance=request.user)
 		profile_form = UserProfileForm(request.POST, instance=user_prof)
-		
+
 		#get the data input into the forms and save the details in the object
 		if user_form.is_valid() and profile_form.is_valid():
 			user = user_form.save()
@@ -118,7 +118,7 @@ def change_details(request):
 			user.save()
 
 			profile = profile_form.save(commit = False)
-			
+
 			profile.user = user
 
 			if 'profile_picture' in request.FILES:
@@ -281,6 +281,12 @@ def add_pin(request):
         "title":request.POST['title'],
         "content":request.POST['content']
         })
+
+        # If the user posts this, then they must want this pin to be deleted
+        if(obj.title == "DELETED" and obj.content == "DELETED"):
+            obj.delete()
+            return HttpResponse(status=200, content = "")
+        print("Edited")
 
         print(created)
         print(obj)
