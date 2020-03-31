@@ -29,6 +29,11 @@ class FavPlaceForm(forms.ModelForm):
     class Meta:
         model=FavouritePlace
         fields = ('place_name', 'x_val', 'y_val',)
+        labels = {
+            'place_name': 'Place Name',
+            'x_val': 'Longitude',
+            'y_val': 'Latitude',
+        }
 
 
 
