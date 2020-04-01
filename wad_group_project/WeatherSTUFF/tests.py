@@ -363,6 +363,76 @@ class MapTests(StaticLiveServerTestCase):
             self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
         except:
             assert False
+    
+    def test_delete_pin_not_signed_in(self):
+        """
+        Test to check that anonymous user cannot edit a pin on the map
+        """
+        user = generate_user()
+        pin = generate_pin(user = user, title = "TEST", content = "TEST")
+
+        # Open index page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, "/")
+            )
+
+        # Go through steps of adding a pin
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Remove this").click()
+        time.sleep(0.2)
+
+        # Wait for an error message for upto 3 seconds
+        for i in range(5):
+            try:
+                text = self.driver.switch_to.alert.text
+                break
+            except:
+                time.sleep(0.5)
+
+        # Either test alert for equality or fail if test times out
+        try:
+            self.assertEquals(text, "Error 401 : No User found, you are not logged in.")
+        except:
+            assert False
+
+    def test_delete_non_user_pin(self):
+        """
+        Test to check that anonymous user cannot edit a pin on the map
+        """
+        user = generate_user(username="bobby")
+        pin = generate_pin(user = user, title = "TEST", content = "TEST")
+
+        # Open signup page
+        self.driver.get(
+            '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:register"))
+            )
+
+        # Go through steps of signing up
+        ac = ActionChains(self.driver)
+        self.driver.set_window_size(550, 693)
+        self.driver.find_element(By.ID, "id_username").send_keys("test")
+        self.driver.find_element(By.ID, "id_password").send_keys("test")
+        self.driver.find_element(By.ID, "formButton").click()
+        self.driver.find_element(By.LINK_TEXT, "Home").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Remove this").click()
+        time.sleep(0.2)
+
+        # Wait for an error message for upto 3 seconds
+        for i in range(5):
+            try:
+                text = self.driver.switch_to.alert.text
+                break
+            except:
+                time.sleep(0.5)
+
+        # Either test alert for equality or fail if test times out
+        try:
+            self.assertIn(text, "Error 401 : That is not your pin to change.")
+        except:
+            assert False
 
     def test_add_pin_signed_in(self):
         """
@@ -379,7 +449,7 @@ class MapTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
         self.driver.find_element(By.LINK_TEXT, "Home").click()
 
         # GO through steps of adding a pin
@@ -411,7 +481,7 @@ class MapTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
         self.driver.find_element(By.LINK_TEXT, "Home").click()
 
         # Go through steps of adding a pin
@@ -420,8 +490,7 @@ class MapTests(StaticLiveServerTestCase):
         self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
 
         # Delete the pin
-        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-draw-edit-remove").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".leaflet-marker-icon:nth-child(1)").click()
+        self.driver.find_element(By.LINK_TEXT, "Remove this").click()
         time.sleep(0.2)
 
         # Check element is missing from map
@@ -431,8 +500,6 @@ class MapTests(StaticLiveServerTestCase):
         except:
             assert True
 
-        # Below is a test to check that the pin was deleted from database
-        """
         # Check database for pins by the test user, wheck that pin has regestered
         user = User.objects.get(username="test")
         userProf = UserProfile.objects.get(user=user)
@@ -440,7 +507,7 @@ class MapTests(StaticLiveServerTestCase):
 
         # Check that the user has added first pin to account
         self.assertEqual(pin.count(), 0)
-        """
+
 
     def test_edit_user_pin(self):
         """
@@ -458,7 +525,7 @@ class MapTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
         self.driver.find_element(By.LINK_TEXT, "Home").click()
 
         # GO through steps of adding a pin
@@ -499,7 +566,7 @@ class MapTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
         self.driver.find_element(By.LINK_TEXT, "Home").click()
 
         # Go through steps of adding a pin
@@ -556,7 +623,7 @@ class SignUpTests(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").click()
         self.driver.find_element(By.ID, "id_password").send_keys("test123")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         # Check that new user added to database sucessfully
         try:
@@ -583,7 +650,7 @@ class SignUpTests(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "id_username").send_keys("bobby")
         self.driver.find_element(By.ID, "id_password").click()
         self.driver.find_element(By.ID, "id_password").send_keys("test123")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         # Check error message is displayed
         src = self.driver.page_source
@@ -618,7 +685,7 @@ class SignInTests(StaticLiveServerTestCase):
         # Sign up with a new user 'test'
         self.driver.find_element(By.NAME, "username").send_keys("unknownuser")
         self.driver.find_element(By.NAME, "password").send_keys("unknown")
-        self.driver.find_element(By.ID, "loginButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         src = self.driver.page_source
         text_found = re.search(r'Invalid login details, please try again', src)
@@ -637,7 +704,7 @@ class SignInTests(StaticLiveServerTestCase):
         # Sign up with a new user 'test'
         self.driver.find_element(By.NAME, "username").send_keys("admin")
         self.driver.find_element(By.NAME, "password").send_keys("admin")
-        self.driver.find_element(By.ID, "loginButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         url = self.driver.current_url
         my_account_url = '%s%s' % (self.live_server_url, reverse("WeatherSTUFF:myaccount"))
@@ -725,7 +792,7 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         # Go through steps of deleting account
         self.driver.find_element(By.LINK_TEXT, "My Account").click()
@@ -755,7 +822,7 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
         self.driver.set_window_size(550, 693)
         self.driver.find_element(By.ID, "id_username").send_keys("test")
         self.driver.find_element(By.ID, "id_password").send_keys("test")
-        self.driver.find_element(By.ID, "registerButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
 
         # Go through steps of changing details
         self.driver.find_element(By.LINK_TEXT, "My Account").click()
@@ -764,7 +831,7 @@ class MyAccountSeleniumTests(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "id_username").send_keys("newtest")
         self.driver.find_element(By.ID, "id_password").clear()
         self.driver.find_element(By.ID, "id_password").send_keys("newtest")
-        self.driver.find_element(By.ID, "updateButton").click()
+        self.driver.find_element(By.ID, "formButton").click()
         
         # Check that username has changed sucessfully
         try:
