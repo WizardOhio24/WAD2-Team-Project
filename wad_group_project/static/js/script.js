@@ -184,7 +184,7 @@ function addPinsToMap(map){
 
       var myMarker =  L.marker( [mf["y_val"], mf["x_val"]] );
       console.log(mf);
-      myMarker.bindPopup( mf["content"] , {editable: true, removable: true, username: mf['user'] + " ",date: mf['date'], nametag: " ", title:mf['title']} )
+      myMarker.bindPopup( mf["content"] , {editable: true, removable: true, username: mf['user'] ,date: mf['date'], nametag: " ", title:mf['title']} )
       prevPins.addLayer(myMarker);
     }
 });
