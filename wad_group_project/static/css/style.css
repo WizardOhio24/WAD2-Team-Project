@@ -182,8 +182,6 @@
     
 }
 
-
-
 ul{
     list-style-type: none;
     
@@ -195,6 +193,11 @@ ul{
     text-decoration: none;
     color:white;
     
+}
+
+#movedText{
+    position:relative;
+    right:5%;
 }
 
 .listDiv ul li a:hover{
