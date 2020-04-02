@@ -21,7 +21,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from WeatherSTUFF.models import FavouritePlace, Pin, UserProfile
 from WeatherSTUFF.forms import UserForm, UserProfileForm, DeleteProfileForm, DeletePinForm, FavPlaceForm
-from populate import populate
+from population_script import populate
 
 
 class PinMethodTests(TestCase):
