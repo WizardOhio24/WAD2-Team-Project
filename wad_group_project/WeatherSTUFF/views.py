@@ -221,32 +221,21 @@ def show_fav_place(request, fav_place_slug):
 		return redirect(reverse('WeatherSTUFF:myaccount'))
 	return render(request, 'WeatherSTUFF/favPlace.html', context={'form':form, 'fav_place':fav_place, 'pins':pins})
 
-
-#show the details of the pin a user has created
+#show details of pin
 def show_pin(request, pin_name_slug):
-	context_dict={}
-	if request.method=='POST':
 
-		if request.user.is_authenticated:
-			form = DeletePinForm(request.POST)
-			context_dict['form'] = form
-			try:
-				#get the pin that was clicked on, by using its unique slug value
-				pin = Pin.objects.filter(slug=pin_name_slug).first()
+	#get the pin
+	pin= Pin.objects.filter(slug=pin_name_slug).first()
+	form = DeletePinForm()
 
-				context_dict['pin'] = pin
-
-				#delete the pins
-				pin.delete()
-
-			except Pin.DoesNotExist:
-
-				context_dict['pin'] = None
-
-		context_dict['message'] = "You pin has been succesfully deleted"
-
-
-	return render(request, 'WeatherSTUFF/pin.html', context=context_dict)
+	#process the form to delete the pin
+	#if button pressed, the pin object is deleted
+	if request.method=="POST":
+		form = DeletePinForm(request.POST)
+		pin.delete()
+		#redirect the user to their myaccount page
+		return redirect(reverse('WeatherSTUFF:myaccount'))
+	return render(request, 'WeatherSTUFF/pin.html', context={'form':form, 'pin':pin})
 
 
 # Receive a pin post request, save pin to server
